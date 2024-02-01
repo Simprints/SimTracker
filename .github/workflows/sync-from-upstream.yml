@@ -27,4 +27,3 @@ jobs:
             Approve & Merge if the changes are OK. If you add modifications, get someone else to approve them.
           auto_merge: false
           retries: 3
-          ignore_fail: true # to skip silently if it's the same PR
