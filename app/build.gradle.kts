@@ -204,6 +204,10 @@ android {
         }
     }
 
+    base {
+        archivesName.set("simtracker-dhis2-v" + libs.versions.vName.get())
+    }
+
     kotlinOptions {
         jvmTarget = "17"
     }
