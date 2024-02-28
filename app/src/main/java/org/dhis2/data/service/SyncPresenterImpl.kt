@@ -22,6 +22,7 @@ import org.dhis2.commons.prefs.PreferenceProvider
 import org.dhis2.data.service.workManager.WorkManagerController
 import org.dhis2.data.service.workManager.WorkerItem
 import org.dhis2.data.service.workManager.WorkerType
+import org.dhis2.usescases.simprintsId.DownloadSimprintsIdAttributesUseCase
 import org.dhis2.utils.DateUtils
 import org.dhis2.utils.analytics.AnalyticsHelper
 import org.dhis2.utils.analytics.matomo.DEFAULT_EXTERNAL_TRACKER_NAME
@@ -47,6 +48,7 @@ class SyncPresenterImpl(
     private val analyticsHelper: AnalyticsHelper,
     private val syncStatusController: SyncStatusController,
     private val syncRepository: SyncRepository,
+    private val downloadSimprintsIdAttributesUseCase: DownloadSimprintsIdAttributesUseCase,
 ) : SyncPresenter {
 
     override fun initSyncControllerMap() {
@@ -195,6 +197,11 @@ class SyncPresenterImpl(
                     ),
                 ).blockingAwait()
         }
+    }
+
+    override fun downloadSimprintsIdAttributes() {
+        downloadSimprintsIdAttributesUseCase.execute()
+            .exceptionOrNull()?.let { throw it }
     }
 
     override fun syncMetadata(progressUpdate: SyncMetadataWorker.OnProgressUpdate) {

@@ -20,6 +20,8 @@ import org.dhis2.data.forms.dataentry.SearchTEIRepository
 import org.dhis2.data.forms.dataentry.SearchTEIRepositoryImpl
 import org.dhis2.form.data.FormValueStore
 import org.dhis2.form.data.OptionsRepository
+import org.dhis2.usescases.simprintsId.GetSimprintsModuleIdUseCase
+import org.dhis2.usescases.simprintsId.GetSimprintsProjectIdUseCase
 import org.dhis2.usescases.teiDashboard.DashboardRepository
 import org.dhis2.usescases.teiDashboard.data.ProgramConfigurationRepository
 import org.dhis2.usescases.teiDashboard.domain.GetNewEventCreationTypeOptions
@@ -142,8 +144,14 @@ class TEIDataModule(
     @Provides
     fun provideTeiCardMapper(
         resourceManager: ResourceManager,
+        getSimprintsProjectIdUseCase: GetSimprintsProjectIdUseCase,
+        getSimprintsModuleIdUseCase: GetSimprintsModuleIdUseCase,
     ): TeiDashboardCardMapper {
-        return TeiDashboardCardMapper(resourceManager)
+        return TeiDashboardCardMapper(
+            resourceManager,
+            getSimprintsProjectIdUseCase,
+            getSimprintsModuleIdUseCase,
+        )
     }
 
     @Provides

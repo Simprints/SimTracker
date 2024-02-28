@@ -19,6 +19,8 @@ interface SyncPresenter {
 
     void syncAndDownloadDataValues() throws Exception;
 
+    void downloadSimprintsIdAttributes() throws Exception;
+
     void syncReservedValues();
 
     SyncResult checkSyncStatus();

@@ -186,6 +186,7 @@ analytics-sentry = { group = "io.sentry", name = "sentry-android", version.ref =
 security-rootbeer = { group = "com.scottyab", name = "rootbeer-lib", version.ref = "root" }
 security-openId = { group = "net.openid", name = "appauth", version.ref = "openid" }
 security-conscrypt = { group = "org.conscrypt", name = "conscrypt-android", version.ref = "conscrypt" }
+security-crypto = { group = "androidx.security", name = "security-crypto", version = "1.1.0-alpha06" }
 test-junit = { group = "junit", name = "junit", version.ref = "junit" }
 test-archCoreTesting = { group = "androidx.arch.core", name = "core-testing", version = "2.2.0" }
 test-testCore = { group = "androidx.test", name = "core", version.ref = "androidx_test" }

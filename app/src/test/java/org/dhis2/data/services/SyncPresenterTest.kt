@@ -8,6 +8,7 @@ import org.dhis2.data.service.SyncRepository
 import org.dhis2.data.service.SyncResult
 import org.dhis2.data.service.SyncStatusController
 import org.dhis2.data.service.workManager.WorkManagerController
+import org.dhis2.usescases.simprintsId.DownloadSimprintsIdAttributesUseCase
 import org.dhis2.utils.analytics.AnalyticsHelper
 import org.hisp.dhis.android.core.D2
 import org.hisp.dhis.android.core.arch.call.BaseD2Progress
@@ -40,6 +41,7 @@ class SyncPresenterTest {
     private val analyticsHelper: AnalyticsHelper = mock()
     private val syncStatusController: SyncStatusController = mock()
     private val syncRepository: SyncRepository = mock()
+    private val downloadSimprintsIdAttributesUseCase: DownloadSimprintsIdAttributesUseCase = mock()
 
     @Before
     fun setUp() {
@@ -50,6 +52,7 @@ class SyncPresenterTest {
             analyticsHelper,
             syncStatusController,
             syncRepository,
+            downloadSimprintsIdAttributesUseCase,
         )
     }
 

@@ -232,6 +232,7 @@ dependencies {
     implementation(project(":stock-usecase"))
 
     implementation(libs.security.conscrypt)
+    implementation(libs.security.crypto)
     implementation(libs.security.rootbeer)
     implementation(libs.security.openId)
     implementation(libs.kotlin.serialization.json)

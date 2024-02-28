@@ -3,6 +3,8 @@ package org.dhis2.usescases.teiDashboard.ui.mapper
 import org.dhis2.R
 import org.dhis2.commons.data.tuples.Pair
 import org.dhis2.commons.resources.ResourceManager
+import org.dhis2.usescases.simprintsId.GetSimprintsModuleIdUseCase
+import org.dhis2.usescases.simprintsId.GetSimprintsProjectIdUseCase
 import org.dhis2.usescases.teiDashboard.DashboardProgramModel
 import org.hisp.dhis.android.core.common.State
 import org.hisp.dhis.android.core.enrollment.Enrollment
@@ -24,6 +26,8 @@ import org.mockito.kotlin.whenever
 class TEIDetailMapperTest {
 
     private val resourceManager: ResourceManager = mock()
+    private val getSimprintsProjectIdUseCase: GetSimprintsProjectIdUseCase = mock()
+    private val getSimprintsModuleIdUseCase: GetSimprintsModuleIdUseCase = mock()
     private lateinit var mapper: TeiDashboardCardMapper
 
     @Before
@@ -31,7 +35,11 @@ class TEIDetailMapperTest {
         whenever(resourceManager.getString(R.string.show_more)) doReturn "Show more"
         whenever(resourceManager.getString(R.string.show_less)) doReturn "Show less"
 
-        mapper = TeiDashboardCardMapper(resourceManager)
+        mapper = TeiDashboardCardMapper(
+            resourceManager,
+            getSimprintsProjectIdUseCase,
+            getSimprintsModuleIdUseCase,
+        )
     }
 
     @Test

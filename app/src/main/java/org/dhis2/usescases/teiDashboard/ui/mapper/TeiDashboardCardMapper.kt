@@ -12,6 +12,8 @@ import org.dhis2.R
 import org.dhis2.commons.data.tuples.Pair
 import org.dhis2.commons.date.toUi
 import org.dhis2.commons.resources.ResourceManager
+import org.dhis2.usescases.simprintsId.GetSimprintsModuleIdUseCase
+import org.dhis2.usescases.simprintsId.GetSimprintsProjectIdUseCase
 import org.dhis2.usescases.teiDashboard.DashboardProgramModel
 import org.dhis2.usescases.teiDashboard.ui.model.TeiCardUiModel
 import org.hisp.dhis.android.core.common.ValueType
@@ -28,6 +30,8 @@ import java.util.Date
 
 class TeiDashboardCardMapper(
     val resourceManager: ResourceManager,
+    private val getSimprintsProjectIdUseCase: GetSimprintsProjectIdUseCase,
+    private val getSimprintsModuleIdUseCase: GetSimprintsModuleIdUseCase,
 ) {
 
     fun map(
@@ -156,6 +160,15 @@ class TeiDashboardCardMapper(
                 )
             }
         }.also { list ->
+            // Prototype display-only value readouts for mapped Simprints-related attributes
+            addSimprintsData(
+                list,
+                simprintsProjectId = item.currentProgram?.uid()
+                    ?.run(getSimprintsProjectIdUseCase::execute),
+                simprintsModuleId = item.currentOrgUnit?.uid()
+                    ?.run(getSimprintsModuleIdUseCase::execute),
+            )
+        }.also { list ->
             if (item.enrollmentActivePrograms.isNotEmpty()) {
                 addEnrollPrograms(
                     list,
@@ -222,6 +235,29 @@ class TeiDashboardCardMapper(
                 isConstantItem = true,
             ),
         )
+    }
+
+    private fun addSimprintsData(
+        list: MutableList<AdditionalInfoItem>,
+        simprintsProjectId: String?,
+        simprintsModuleId: String?,
+    ) {
+        simprintsProjectId?.run {
+            list.add(
+                AdditionalInfoItem(
+                    key = "${resourceManager.getString(R.string.simprints_project_id)}:",
+                    value = this,
+                ),
+            )
+        }
+        simprintsModuleId?.run {
+            list.add(
+                AdditionalInfoItem(
+                    key = "${resourceManager.getString(R.string.simprints_module_id)}:",
+                    value = this,
+                ),
+            )
+        }
     }
 
     private fun List<Pair<TrackedEntityAttribute, TrackedEntityAttributeValue>>.filterAttributes() =

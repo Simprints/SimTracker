@@ -717,6 +717,8 @@
     <string name="filters_title_event_status">Event status</string>
     <string name="filters_title_enrollment_status">Enrollment status</string>
     <string name="enrollment_date">Enrollment date</string>
+    <string name="simprints_project_id">Simprints Project ID</string>
+    <string name="simprints_module_id">Simprints Module ID</string>
     <string name="dataset_empty_list_can_create">There are no data. Click \"+\" to add new a new record</string>
     <string name="dataset_emtpy_list_can_not_create">There are no data. You don\'t have permission to add new records.</string>
     <string name="validation_rules_empty_description">No description or instruction provided</string>
