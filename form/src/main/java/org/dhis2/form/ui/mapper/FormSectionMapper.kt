@@ -5,6 +5,7 @@ import org.dhis2.form.model.FieldUiModel
 import org.dhis2.form.model.FieldUiModelImpl
 import org.dhis2.form.model.FormSection
 import org.dhis2.form.model.SectionUiModelImpl
+import org.dhis2.form.model.simprints.SimprintsBiometricsAttributeWrapperUiModel
 import org.hisp.dhis.mobile.ui.designsystem.component.SectionState
 
 class FormSectionMapper {
@@ -16,6 +17,10 @@ class FormSectionMapper {
                 if (item is SectionUiModelImpl) {
                     val fields = items.filterIsInstance<FieldUiModelImpl>()
                         .filter { it.programStageSection == item.uid }
+                        .plus(
+                            items.filterIsInstance<SimprintsBiometricsAttributeWrapperUiModel>()
+                                .filter { it.programStageSection == item.uid },
+                        )
                     sections.add(
                         FormSection(
                             uid = item.uid,

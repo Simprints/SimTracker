@@ -70,7 +70,7 @@ android {
     testNamespace = "org.dhis2.test"
 
     base {
-        archivesName.set("dhis2-v" + libs.versions.vName.get())
+        archivesName.set("simtracker-dhis2-v" + libs.versions.vName.get())
     }
 
     defaultConfig {

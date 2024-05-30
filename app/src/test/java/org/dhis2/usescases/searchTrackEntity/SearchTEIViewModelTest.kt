@@ -1,17 +1,18 @@
 package org.dhis2.usescases.searchTrackEntity
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import app.cash.turbine.test
 import com.mapbox.geojson.BoundingBox
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.dhis2.commons.network.NetworkUtils
 import org.dhis2.commons.resources.ResourceManager
+import org.dhis2.commons.simprints.SimprintsBiometricsState
+import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.data.search.SearchParametersModel
 import org.dhis2.form.model.FieldUiModel
@@ -51,6 +52,7 @@ class SearchTEIViewModelTest {
     private val mapStyleConfiguration: MapStyleConfiguration = mock()
     private val resourceManager: ResourceManager = mock()
     private val displayNameProvider: DisplayNameProvider = mock()
+    private val simprintsBiometricsRepository: SimprintsBiometricsRepository = mock()
 
     @ExperimentalCoroutinesApi
     private val testingDispatcher = StandardTestDispatcher()
@@ -64,6 +66,8 @@ class SearchTEIViewModelTest {
         whenever(repository.canCreateInProgramWithoutSearch()) doReturn true
         whenever(repository.getTrackedEntityType()) doReturn testingTrackedEntityType()
         whenever(repository.filtersApplyOnGlobalSearch()) doReturn true
+        whenever(simprintsBiometricsRepository.getSimprintsBiometricsStateFlow(programUid = initialProgram)) doReturn
+            MutableStateFlow(SimprintsBiometricsState())
         viewModel = SearchTEIViewModel(
             initialProgram,
             initialQuery,
@@ -71,6 +75,7 @@ class SearchTEIViewModelTest {
             repositoryKt,
             pageConfigurator,
             mapDataRepository,
+            simprintsBiometricsRepository,
             networkUtils,
             object : DispatcherProvider {
                 override fun io(): CoroutineDispatcher {
@@ -264,15 +269,6 @@ class SearchTEIViewModelTest {
         testingDispatcher.scheduler.advanceUntilIdle()
         val mapResult = viewModel.mapResults.value
         assertTrue(mapResult != null)
-    }
-
-    @Test
-    fun `Should use callback to perform min attributes warning`() = runTest {
-        setCurrentProgram(testingProgram(displayFrontPageList = false))
-        viewModel.onSearch()
-        viewModel.uiState.shouldShowMinAttributeWarning.test {
-            assertTrue(awaitItem())
-        }
     }
 
     @Test

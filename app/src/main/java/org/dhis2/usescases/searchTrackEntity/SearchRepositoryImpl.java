@@ -232,6 +232,18 @@ public class SearchRepositoryImpl implements SearchRepository {
                     dataValue = dataValue.split("_os_")[1];
                     trackedEntityInstanceQuery = trackedEntityInstanceQuery.byFilter(dataId).eq(dataValue);
                 } else
+                    /*
+                    Workaround for the case of
+                    "Get all TEIs by the given tracked entity attribute's value being in a list of values"
+                    while "in" operation is not exposed by the DHIS2 SDK.
+                    First the TEIs are narrowed down by the tracked entity attribute's value being non-empty (like "_%").
+                    Then they are selected by TEI identifier list instead of tracked entity attribute value list.
+                    This case is distinguished by the TEI identifiers being separated by ";" to form a "list".
+                    Standalone ";" is excluded, because then the "like" operation would select all instead of none.
+                     */
+                    if (dataValue.contains(";") && !dataValue.equals(";")) {
+                        trackedEntityInstanceQuery = trackedEntityInstanceQuery.byFilter(dataId).like("_%").byTrackedEntities().in(dataValue.split(";"));
+                } else
                     trackedEntityInstanceQuery = trackedEntityInstanceQuery.byFilter(dataId).like(dataValue);
             }
         }

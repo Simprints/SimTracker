@@ -41,6 +41,7 @@ import org.dhis2.commons.resources.ResourceManager
 import org.dhis2.commons.sync.OnDismissListener
 import org.dhis2.commons.sync.SyncContext.EnrollmentEvent
 import org.dhis2.databinding.FragmentTeiDataBinding
+import org.dhis2.form.BR
 import org.dhis2.form.model.EventMode
 import org.dhis2.usescases.eventsWithoutRegistration.eventCapture.EventCaptureActivity
 import org.dhis2.usescases.eventsWithoutRegistration.eventInitial.EventInitialActivity
@@ -142,7 +143,21 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                         showDetailCard()
                     }
                 }
+
                 dashboardModel.observe(viewLifecycleOwner) {
+                    // View binding for Simprints biometrics readout & action button UI, same as in TEI details
+                    it.trackedEntityInstance.uid()?.let { teiUid ->
+                        programUid?.run {
+                            binding.viewSimprintsBiometrics?.setVariable(
+                                BR.simprintsBiometricsUiModel,
+                                dashboardViewModel.getSimprintsBiometricsUiModel(
+                                    teiUid,
+                                    programUid = this,
+                                ),
+                            )
+                        }
+                    }
+
                     if (sharedPreferences.getString(PREF_COMPLETED_EVENT, null) != null) {
                         presenter.displayGenerateEvent(
                             sharedPreferences.getString(
@@ -466,17 +481,17 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
 
     override fun openEventDetails(intent: Intent, options: ActivityOptionsCompat) =
         contractHandler.scheduleEvent(intent, options).observe(viewLifecycleOwner) {
-            presenter.fetchEvents()
+            updateEnrollment(true)
         }
 
     override fun openEventInitial(intent: Intent) =
         contractHandler.editEvent(intent).observe(viewLifecycleOwner) {
-            presenter.fetchEvents()
+            updateEnrollment(true)
         }
 
     override fun openEventCapture(intent: Intent) =
         contractHandler.editEvent(intent).observe(viewLifecycleOwner) {
-            presenter.fetchEvents()
+            updateEnrollment(true)
         }
 
     override fun goToEventInitial(
@@ -570,6 +585,13 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
     override fun showProgramRuleErrorMessage() {
         dashboardActivity.runOnUiThread {
             showDescription(getString(R.string.error_applying_rule_effects))
+        }
+    }
+
+    private fun updateEnrollment(update: Boolean) {
+        if (update) {
+            presenter.fetchEvents()
+            dashboardViewModel.updateDashboard()
         }
     }
 

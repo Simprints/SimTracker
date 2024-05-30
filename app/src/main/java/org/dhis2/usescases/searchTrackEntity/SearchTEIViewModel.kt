@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -14,6 +15,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.dhis2.R
@@ -23,6 +25,10 @@ import org.dhis2.commons.filters.FilterManager
 import org.dhis2.commons.idlingresource.SearchIdlingResourceSingleton
 import org.dhis2.commons.network.NetworkUtils
 import org.dhis2.commons.resources.ResourceManager
+import org.dhis2.commons.simprints.SimprintsBiometricsAction
+import org.dhis2.commons.simprints.SimprintsBiometricsState
+import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
+import org.dhis2.commons.simprints.ui.SimprintsBiometricsUiModel
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.data.search.SearchParametersModel
 import org.dhis2.form.model.FieldUiModelImpl
@@ -49,6 +55,7 @@ class SearchTEIViewModel(
     private val searchRepositoryKt: SearchRepositoryKt,
     private val searchNavPageConfigurator: SearchPageConfigurator,
     private val mapDataRepository: MapDataRepository,
+    private val simprintsBiometricsRepository: SimprintsBiometricsRepository,
     private val networkUtils: NetworkUtils,
     private val dispatchers: DispatcherProvider,
     private val mapStyleConfig: MapStyleConfiguration,
@@ -65,6 +72,38 @@ class SearchTEIViewModel(
 
     private val _legacyInteraction = MutableLiveData<LegacyInteraction?>()
     val legacyInteraction: LiveData<LegacyInteraction?> = _legacyInteraction
+
+    data class TeiBiometricUnlock(
+        val teiUid: String?,
+        val programUid: String?,
+        val enrollmentUid: String?,
+    )
+
+    // To ensure a non-duplicate unlock event - keeping track of previous state to compare against
+    private var previousSimprintsBiometricTeiState: SimprintsBiometricsState =
+        simprintsBiometricsRepository
+            .getSimprintsBiometricsStateFlow(programUid = initialProgramUid).value
+
+    val teiBiometricUnlocks: LiveData<TeiBiometricUnlock> =
+        simprintsBiometricsRepository.getSimprintsBiometricsStateFlow()
+            .transform { new ->
+                val old = previousSimprintsBiometricTeiState
+                previousSimprintsBiometricTeiState = new
+                val isTheSameTei = old.teiUid == new.teiUid
+                val isTheSameProgram = old.programUid == new.programUid
+                val gotUnlockedNow = with(System.currentTimeMillis()) {
+                    old.isLocked(this) && !new.isLocked(this)
+                }
+                if (isTheSameTei && isTheSameProgram && gotUnlockedNow) {
+                    emit(new) // this indicates arrival of new search results to show
+                }
+            }
+            .map { newlyUnlockedTeiState ->
+                with(newlyUnlockedTeiState) {
+                    TeiBiometricUnlock(teiUid, programUid, enrollmentUid)
+                }
+            }
+            .asLiveData()
 
     private val _refreshData = MutableLiveData(Unit)
     val refreshData: LiveData<Unit> = _refreshData
@@ -104,11 +143,63 @@ class SearchTEIViewModel(
             )
             _pageConfiguration.postValue(searchNavPageConfigurator.initVariables())
 
+            // Watching search results to show
+            viewModelScope.launch(dispatchers.io()) {
+                simprintsBiometricsRepository
+                    .getBiometricSearchResultFlow(initialProgramUid)
+                    .collect { teiUidsInProgram ->
+                        simprintsBiometricsRepository.getSimprintsGuidAttributeUids()
+                            .forEach { simprintsGuidAttributeUid ->
+                                // When the TEI filtering key is expectedly the simprintsGuid attribute,
+                                // it is not a mistake that the TEI IDs are instead of the GUID values,
+                                // and neither is the inclusion of the trailing ";" separator.
+                                // See SearchRepositoryImpl for the logic of this workaround.
+                                queryData[simprintsGuidAttributeUid] = teiUidsInProgram
+                                    .joinToString(separator = ";", postfix = ";")
+                            }
+                        onSearch()
+                    }
+            }
+
             _teTypeName.postValue(
                 searchRepository.trackedEntityType.displayName(),
             )
         }
     }
+
+    fun isSimprintsBiometricSearchAvailable(): Boolean =
+        simprintsBiometricsRepository.isBiometricIdentificationAvailable(initialProgramUid)
+
+    fun launchSimprintsBiometricSearch() {
+        simprintsBiometricsRepository.dispatchSimprintsAction(
+            SimprintsBiometricsAction(isOneToMany = true),
+        )
+    }
+
+    // One TEI is viewed at a time, so its Simprints biometrics state model updates on each new TEI.
+
+    private val teiToSimprintsBiometricsUiModelMap: MutableMap<String, SimprintsBiometricsUiModel> =
+        mutableMapOf()
+
+    fun checkIfTeiLocked(teiUid: String?, programUid: String?, enrollmentUid: String?): Boolean =
+        simprintsBiometricsRepository
+            .getSimprintsBiometricsStateFlow(teiUid, programUid, enrollmentUid)
+            .value.isLocked(millisNow = System.currentTimeMillis())
+
+    fun getSimprintsBiometricsUiModel(
+        teiUid: String,
+        programUid: String,
+    ): SimprintsBiometricsUiModel =
+        teiToSimprintsBiometricsUiModelMap.getOrPut(teiUid) {
+            teiToSimprintsBiometricsUiModelMap.clear()
+            SimprintsBiometricsUiModel(
+                simprintsBiometricsRepository.getSimprintsBiometricsStateFlow(
+                    teiUid,
+                    programUid,
+                ),
+                simprintsBiometricsRepository::dispatchSimprintsAction,
+            )
+        }
 
     fun setListScreen() {
         _screenState.value.takeIf { it?.screenState == SearchScreenState.MAP }?.let {
@@ -680,6 +771,12 @@ class SearchTEIViewModel(
         closeSearchOrFilterCallback: () -> Unit,
         closeKeyboardCallback: () -> Unit,
     ) {
+        // Back button, or back arrow on toolbar, first of all back out of biometric search
+        if (simprintsBiometricsRepository.getSimprintsGuidAttributeUids().any(queryData::containsKey)) {
+            clearQueryData()
+            return
+        }
+
         val searchScreenIsForced = _screenState.value?.let {
             if (it is SearchList && it.searchForm.isForced) {
                 it.searchForm.isForced

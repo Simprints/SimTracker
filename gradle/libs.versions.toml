@@ -171,6 +171,7 @@ github-treeView = { group = "com.github.bmelnychuk", name = "atv", version = "1.
 barcodeScanner-zxing = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
 barcodeScanner-scanner = { group = "me.dm7.barcodescanner", name = "zxing", version.ref = "zxingbarcode" }
 barcodeScanner-zxing-android = { group = "com.journeyapps", name = "zxing-android-embedded", version.ref = "zxingandroid" }
+libsimprints = { group = "com.simprints", name = "libsimprints", version = "2024.1.1" }
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 analytics-matomo = { group = "com.github.matomo-org", name = "matomo-sdk-android", version.ref = "matomo" }

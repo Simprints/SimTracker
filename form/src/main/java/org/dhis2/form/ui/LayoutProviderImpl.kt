@@ -131,4 +131,6 @@ class LayoutProviderImpl : LayoutProvider {
     }
 
     override fun getLayoutForSection() = R.layout.form_section
+
+    override fun getLayoutForSimprintsBiometrics() = R.layout.form_simprints_biometrics
 }
