@@ -242,7 +242,7 @@ android {
                         else -> ""
                     }
 
-                    output.outputFileName = "dhis2-v${libs.versions.vName.get()}$suffix.apk"
+                    output.outputFileName = "simtracker-v${libs.versions.vName.get()}$suffix.apk"
                 }
             }
 
