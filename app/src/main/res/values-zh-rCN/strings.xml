@@ -1,7 +1,7 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">DHIS2</string>
-    <string name="logo_text">区域健康信息系统</string>
+    <string name="app_name">SimTracker</string>
+    <string name="logo_text">simtracker</string>
     <string name="logo_number">2</string>
     <!-- Warnings and error messages -->
     <string name="error">错误</string>

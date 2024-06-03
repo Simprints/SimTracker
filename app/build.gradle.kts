@@ -74,7 +74,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.dhis2"
+        applicationId = "com.simprints.dhis2"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.sdk.get().toInt()
         versionCode = libs.versions.vCode.get().toInt()

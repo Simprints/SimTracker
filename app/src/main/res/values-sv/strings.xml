@@ -1,7 +1,7 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">DHIS2</string>
-    <string name="logo_text">DHIS</string>
+    <string name="app_name">SimTracker</string>
+    <string name="logo_text">simtracker</string>
     <!-- Warnings and error messages -->
     <string name="error">Fel</string>
     <string name="error_wrong_server_url">Fel serveradress</string>
