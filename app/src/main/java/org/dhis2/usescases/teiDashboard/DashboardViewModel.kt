@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
+import org.dhis2.commons.simprints.ui.SimprintsBiometricsUiModel
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.utils.AuthorityException
 import org.dhis2.utils.analytics.ACTIVE_FOLLOW_UP
@@ -21,6 +23,7 @@ import timber.log.Timber
 
 class DashboardViewModel(
     private val repository: DashboardRepository,
+    private val simprintsBiometricsRepository: SimprintsBiometricsRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val dispatcher: DispatcherProvider,
 ) : ViewModel() {
@@ -40,6 +43,26 @@ class DashboardViewModel(
 
     private var _state = MutableStateFlow<State?>(null)
     val state = _state.asStateFlow()
+
+    // One TEI is viewed at a time, so its Simprints biometrics state model updates on each new TEI.
+
+    private val teiToSimprintsBiometricsUiModelMap: MutableMap<String, SimprintsBiometricsUiModel> =
+        mutableMapOf()
+
+    fun getSimprintsBiometricsUiModel(
+        teiUid: String,
+        programUid: String,
+    ): SimprintsBiometricsUiModel =
+        teiToSimprintsBiometricsUiModelMap.getOrPut(teiUid) {
+            teiToSimprintsBiometricsUiModelMap.clear()
+            SimprintsBiometricsUiModel(
+                simprintsBiometricsRepository.getSimprintsBiometricsStateFlow(
+                    teiUid,
+                    programUid,
+                ),
+                simprintsBiometricsRepository::dispatchSimprintsAction,
+            )
+        }
 
     private val _dashboardModel = MutableLiveData<DashboardModel>()
     var dashboardModel: LiveData<DashboardModel> = _dashboardModel

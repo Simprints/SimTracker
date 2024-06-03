@@ -1,14 +1,18 @@
 package org.dhis2.form.ui
 
 import androidx.databinding.ObservableField
+import kotlinx.coroutines.flow.StateFlow
 import org.dhis2.commons.extensions.Preconditions.Companion.isNull
 import org.dhis2.commons.orgunitselector.OrgUnitSelectorScope
+import org.dhis2.commons.simprints.SimprintsBiometricsAction
+import org.dhis2.commons.simprints.SimprintsBiometricsState
 import org.dhis2.form.model.EventCategory
 import org.dhis2.form.model.FieldUiModel
 import org.dhis2.form.model.FieldUiModelImpl
 import org.dhis2.form.model.OptionSetConfiguration
 import org.dhis2.form.model.PeriodSelector
 import org.dhis2.form.model.SectionUiModelImpl
+import org.dhis2.form.model.simprints.SimprintsBiometricsAttributeWrapperUiModel
 import org.dhis2.form.ui.event.UiEventFactoryImpl
 import org.dhis2.form.ui.provider.AutoCompleteProvider
 import org.dhis2.form.ui.provider.DisplayNameProvider
@@ -221,6 +225,23 @@ class FieldViewModelFactoryImpl(
             0,
             SectionRenderingType.LISTING.name,
             currentSection,
+        )
+    }
+
+    override fun createForSimprintsBiometrics(
+        id: String,
+        value: String,
+        programStageSection: String?,
+        teiStateFlow: StateFlow<SimprintsBiometricsState>,
+        onInteraction: (SimprintsBiometricsAction) -> Unit,
+    ): FieldUiModel {
+        return SimprintsBiometricsAttributeWrapperUiModel(
+            id,
+            layoutProvider.getLayoutForSimprintsBiometrics(),
+            value,
+            programStageSection,
+            teiStateFlow = teiStateFlow,
+            onInteraction = onInteraction,
         )
     }
 }

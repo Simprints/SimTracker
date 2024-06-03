@@ -3,6 +3,7 @@ package org.dhis2;
 import org.dhis2.commons.featureconfig.di.FeatureConfigModule;
 import org.dhis2.commons.network.NetworkUtils;
 import org.dhis2.commons.network.NetworkUtilsModule;
+import org.dhis2.commons.simprints.di.SimprintsBiometricsDiModule;
 import org.dhis2.data.dispatcher.DispatcherModule;
 import org.dhis2.data.forms.dataentry.validation.ValidatorModule;
 import org.dhis2.commons.locationprovider.LocationModule;
@@ -48,6 +49,7 @@ import dispatch.core.DispatcherProvider;
         ValidatorModule.class,
         CrashReportModule.class,
         LocationModule.class,
+        SimprintsBiometricsDiModule.class,
         DispatcherModule.class,
         FeatureConfigModule.class,
         NetworkUtilsModule.class,

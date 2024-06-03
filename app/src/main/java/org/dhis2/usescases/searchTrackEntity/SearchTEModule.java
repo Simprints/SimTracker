@@ -23,6 +23,7 @@ import org.dhis2.commons.resources.MetadataIconProvider;
 import org.dhis2.commons.resources.DhisPeriodUtils;
 import org.dhis2.commons.resources.ResourceManager;
 import org.dhis2.commons.schedulers.SchedulerProvider;
+import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository;
 import org.dhis2.commons.viewmodel.DispatcherProvider;
 import org.dhis2.data.dhislogic.DhisEnrollmentUtils;
 import org.dhis2.data.enrollment.EnrollmentUiDataHelper;
@@ -299,6 +300,7 @@ public class SearchTEModule {
             MapDataRepository mapDataRepository,
             NetworkUtils networkUtils,
             D2 d2,
+            SimprintsBiometricsRepository simprintsBiometricsRepository,
             ResourceManager resourceManager,
             DisplayNameProvider displayNameProvider
     ) {
@@ -309,6 +311,7 @@ public class SearchTEModule {
                 initialProgram,
                 initialQuery,
                 mapDataRepository,
+                simprintsBiometricsRepository,
                 networkUtils,
                 new SearchDispatchers(),
                 new MapStyleConfiguration(d2),

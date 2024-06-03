@@ -62,6 +62,13 @@
                             app:header="@{header}" />
                     </androidx.cardview.widget.CardView>
 
+                    <!-- Similar Simprints biometrics readout and action UI as in the forms in TEI's details -->
+                    <include
+                        android:id="@+id/viewSimprintsBiometrics"
+                        layout="@layout/form_simprints_biometrics"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
                 </LinearLayout>
 
 

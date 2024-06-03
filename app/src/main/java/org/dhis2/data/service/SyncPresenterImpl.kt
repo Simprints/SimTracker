@@ -19,6 +19,7 @@ import org.dhis2.commons.prefs.Preference.Companion.TIME_DAILY
 import org.dhis2.commons.prefs.Preference.Companion.TIME_DATA
 import org.dhis2.commons.prefs.Preference.Companion.TIME_META
 import org.dhis2.commons.prefs.PreferenceProvider
+import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.data.service.workManager.WorkManagerController
 import org.dhis2.data.service.workManager.WorkerItem
 import org.dhis2.data.service.workManager.WorkerType
@@ -48,6 +49,7 @@ class SyncPresenterImpl(
     private val analyticsHelper: AnalyticsHelper,
     private val syncStatusController: SyncStatusController,
     private val syncRepository: SyncRepository,
+    private val simprintsBiometricsRepository: SimprintsBiometricsRepository,
 ) : SyncPresenter {
 
     override fun initSyncControllerMap() {
@@ -196,6 +198,10 @@ class SyncPresenterImpl(
                     ),
                 ).blockingAwait()
         }
+    }
+
+    override fun downloadSimprintsDataStoreData() {
+        simprintsBiometricsRepository.downSyncSimprintsConfigs() // from the JSON-based datastore
     }
 
     override fun syncMetadata(progressUpdate: SyncMetadataWorker.OnProgressUpdate) {
