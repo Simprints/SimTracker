@@ -64,8 +64,19 @@ public class SyncDataWorker extends Worker {
         boolean isEventOk = true;
         boolean isTeiOk = true;
         boolean isDataValue = true;
+        boolean isSimprintsDataStoreDataOk = true;
 
         long init = System.currentTimeMillis();
+
+        try { // separate step of sync for Simprints from datastore (typically small amount of data)
+            presenter.downloadSimprintsDataStoreData();
+        } catch (Exception e) {
+            if (!new NetworkUtils(getApplicationContext()).isOnline()) {
+                presenter.setNetworkUnavailable();
+            }
+            Timber.e(e);
+            isSimprintsDataStoreDataOk = false;
+        }
 
         triggerNotification(
                 getApplicationContext().getString(R.string.app_name),
@@ -134,7 +145,7 @@ public class SyncDataWorker extends Worker {
         SyncResult syncResult = presenter.checkSyncStatus();
 
         prefs.setValue(Constants.LAST_DATA_SYNC, lastDataSyncDate);
-        prefs.setValue(Constants.LAST_DATA_SYNC_STATUS, isEventOk && isTeiOk && isDataValue && syncResult == SyncResult.SYNC);
+        prefs.setValue(Constants.LAST_DATA_SYNC_STATUS, isEventOk && isTeiOk && isDataValue && isSimprintsDataStoreDataOk && syncResult == SyncResult.SYNC);
         prefs.setValue(Constants.SYNC_RESULT, syncResult.name());
 
         cancelNotification();

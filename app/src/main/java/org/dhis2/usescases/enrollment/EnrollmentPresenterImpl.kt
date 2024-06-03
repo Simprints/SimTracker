@@ -3,6 +3,9 @@ package org.dhis2.usescases.enrollment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.FlowableProcessor
 import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import org.dhis2.bindings.profilePicturePath
 import org.dhis2.commons.bindings.trackedEntityTypeForTei
 import org.dhis2.commons.data.TeiAttributesInfo
@@ -12,6 +15,8 @@ import org.dhis2.commons.matomo.Labels.Companion.CLICK
 import org.dhis2.commons.matomo.MatomoAnalyticsController
 import org.dhis2.commons.schedulers.SchedulerProvider
 import org.dhis2.commons.schedulers.defaultSubscribe
+import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
+import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.form.data.EnrollmentRepository
 import org.dhis2.form.model.RowAction
 import org.dhis2.usescases.teiDashboard.TeiAttributesProvider
@@ -48,11 +53,15 @@ class EnrollmentPresenterImpl(
     private val matomoAnalyticsController: MatomoAnalyticsController,
     private val eventCollectionRepository: EventCollectionRepository,
     private val teiAttributesProvider: TeiAttributesProvider,
+    private val simprintsBiometricsRepository: SimprintsBiometricsRepository,
+    dispatcherProvider: DispatcherProvider,
 ) {
     private val disposable = CompositeDisposable()
     private val backButtonProcessor: FlowableProcessor<Boolean> = PublishProcessor.create()
     private var hasShownIncidentDateEditionWarning = false
     private var hasShownEnrollmentDateEditionWarning = false
+
+    private val coroutineScope: CoroutineScope = CoroutineScope(dispatcherProvider.io())
 
     fun init() {
         view.setSaveButtonVisible(false)
@@ -118,6 +127,24 @@ class EnrollmentPresenterImpl(
                     { Timber.tag(TAG).e(it) },
                 ),
         )
+
+        // see EnrollmentRepository.simprintsBiometricsActionFlow why it's static, todo improve
+        coroutineScope.launch {
+            EnrollmentRepository.simprintsBiometricsActionFlow.collect { action ->
+                simprintsBiometricsRepository.dispatchSimprintsAction(action)
+            }
+        }
+        // see EnrollmentRepository.simprintsBiometricsStateFlow why it's static, todo improve
+        coroutineScope.launch {
+            teiRepository.blockingGet()?.uid()?.let { teiUid ->
+                simprintsBiometricsRepository.getSimprintsBiometricsStateFlow(
+                    teiUid,
+                    programUid = programRepository.blockingGet()?.uid(),
+                ).collect { teiState ->
+                    EnrollmentRepository.simprintsBiometricsStateFlow.value = teiState
+                }
+            }
+        }
     }
 
     private fun shouldShowDateEditionWarning(uid: String): Boolean {
@@ -225,6 +252,7 @@ class EnrollmentPresenterImpl(
 
     fun onDettach() {
         disposable.clear()
+        coroutineScope.cancel()
     }
 
     fun displayMessage(message: String?) {

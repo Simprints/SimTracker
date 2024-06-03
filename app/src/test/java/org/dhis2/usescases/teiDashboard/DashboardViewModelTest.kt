@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.setMain
+import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.utils.analytics.ACTIVE_FOLLOW_UP
 import org.dhis2.utils.analytics.AnalyticsHelper
@@ -32,6 +33,7 @@ class DashboardViewModelTest {
     private val repository: DashboardRepository = mock()
     private val analyticsHelper: AnalyticsHelper = mock()
     private val testingDispatcher = StandardTestDispatcher()
+    private val simprintsBiometricsRepository: SimprintsBiometricsRepository = mock()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -147,6 +149,7 @@ class DashboardViewModelTest {
 
     private fun getViewModel() = DashboardViewModel(
         repository,
+        simprintsBiometricsRepository,
         analyticsHelper,
         object :
             DispatcherProvider {

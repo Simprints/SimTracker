@@ -1,6 +1,9 @@
 package org.dhis2.form.ui
 
+import kotlinx.coroutines.flow.StateFlow
 import org.dhis2.commons.orgunitselector.OrgUnitSelectorScope
+import org.dhis2.commons.simprints.SimprintsBiometricsAction
+import org.dhis2.commons.simprints.SimprintsBiometricsState
 import org.dhis2.form.model.EventCategory
 import org.dhis2.form.model.FieldUiModel
 import org.dhis2.form.model.OptionSetConfiguration
@@ -50,4 +53,12 @@ interface FieldViewModelFactory {
     ): FieldUiModel
 
     fun createClosingSection(): FieldUiModel
+
+    fun createForSimprintsBiometrics(
+        id: String,
+        value: String,
+        programStageSection: String? = null,
+        teiStateFlow: StateFlow<SimprintsBiometricsState>,
+        onInteraction: (SimprintsBiometricsAction) -> Unit,
+    ): FieldUiModel
 }

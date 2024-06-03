@@ -301,7 +301,7 @@ class ProgramStageSelectionPresenterTest {
     }
 
     @Test
-    fun `onOrgUnitForNewEventSelected success`() = runTest {
+    fun `onOrgUnitForNewEventSelected success`() = runTest { // flaky
         val programUid = "programUid"
         val orgUnitUid = "orgUnitUid"
         val programStageUid = "programStageUid"

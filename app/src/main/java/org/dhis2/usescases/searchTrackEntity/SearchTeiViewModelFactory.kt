@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.dhis2.commons.network.NetworkUtils
 import org.dhis2.commons.resources.ResourceManager
+import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.form.ui.provider.DisplayNameProvider
 import org.dhis2.maps.usecases.MapStyleConfiguration
@@ -16,6 +17,7 @@ class SearchTeiViewModelFactory(
     private val initialProgramUid: String?,
     private val initialQuery: MutableMap<String, String>?,
     private val mapDataRepository: MapDataRepository,
+    private val simprintsBiometricsRepository: SimprintsBiometricsRepository,
     private val networkUtils: NetworkUtils,
     private val dispatchers: DispatcherProvider,
     private val mapStyleConfig: MapStyleConfiguration,
@@ -30,6 +32,7 @@ class SearchTeiViewModelFactory(
             searchRepositoryKt,
             searchNavPageConfigurator,
             mapDataRepository,
+            simprintsBiometricsRepository,
             networkUtils,
             dispatchers,
             mapStyleConfig,

@@ -152,6 +152,7 @@ class TeiAttributesProviderTest {
                 .byTrackedEntityAttribute().eq(anyString())
                 .one().blockingGet(),
         ) doReturnConsecutively trackedEntityAttributeValues()
+            .plus(trackedEntityAttributeValues()) // additional pass is for filtering excluded attributes
 
         val attributes =
             attributesProvider

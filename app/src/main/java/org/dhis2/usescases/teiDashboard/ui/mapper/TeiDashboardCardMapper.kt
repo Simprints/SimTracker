@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import org.dhis2.R
+import org.dhis2.commons.Constants.SIMPRINTS_GUID
 import org.dhis2.commons.date.toUi
 import org.dhis2.commons.resources.ResourceManager
 import org.dhis2.usescases.teiDashboard.DashboardEnrollmentModel
@@ -246,5 +247,6 @@ class TeiDashboardCardMapper(
         this.filter { it.first.valueType() != ValueType.IMAGE }
             .filter { it.first.valueType() != ValueType.COORDINATE }
             .filter { it.first.valueType() != ValueType.FILE_RESOURCE }
+            .filter { it.first.shortName() != SIMPRINTS_GUID } // hide from TEI profile
             .filter { it.second.value()?.isNotEmpty() == true }
 }

@@ -8,6 +8,7 @@ import org.dhis2.commons.matomo.MatomoAnalyticsController
 import org.dhis2.commons.prefs.PreferenceProvider
 import org.dhis2.commons.resources.MetadataIconProvider
 import org.dhis2.commons.schedulers.SchedulerProvider
+import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.data.forms.EnrollmentFormRepository
 import org.dhis2.data.forms.FormRepository
@@ -123,9 +124,10 @@ class TeiDashboardModule(
     @PerActivity
     fun providesViewModelFactory(
         repository: DashboardRepository,
+        simprintsBiometricsRepository: SimprintsBiometricsRepository,
         analyticsHelper: AnalyticsHelper,
         dispatcher: DispatcherProvider,
     ): DashboardViewModelFactory {
-        return DashboardViewModelFactory(repository, analyticsHelper, dispatcher)
+        return DashboardViewModelFactory(repository, simprintsBiometricsRepository, analyticsHelper, dispatcher)
     }
 }
