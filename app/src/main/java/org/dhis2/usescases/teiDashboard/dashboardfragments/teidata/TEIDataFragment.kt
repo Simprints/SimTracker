@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
 import org.dhis2.R
 import org.dhis2.bindings.app
+import org.dhis2.bindings.drawableFrom
 import org.dhis2.commons.Constants
 import org.dhis2.commons.data.EventCreationType
 import org.dhis2.commons.data.EventViewModel
@@ -111,6 +112,8 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
     private var showAllEnrollment = false
     private var programUid: String? = null
 
+    private var simprintsRecordLocked = true
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         with(requireArguments()) {
@@ -184,10 +187,19 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
             viewLifecycleOwner.lifecycleScope.launch {
                 simprintsBiometricsRepository.getSimprintsBiometricsStateFlow().collectLatest { state ->
                     if (state.isLocked(System.currentTimeMillis())) {
+                        simprintsRecordLocked = true
+                        binding.viewSimprintsBiometrics?.root?.visibility = View.VISIBLE
+                        binding.simprintsLockedStatus?.visibility = View.VISIBLE
+                        binding.simprintsUnlockedStatus?.visibility = View.GONE
+
                         binding.emptyTeis.visibility = View.GONE
                         binding.teiRecycler.visibility = View.GONE
                     } else {
+                        simprintsRecordLocked = false
                         binding.viewSimprintsBiometrics?.root?.visibility = View.GONE
+                        binding.simprintsLockedStatus?.visibility = View.GONE
+                        binding.simprintsUnlockedStatus?.visibility = View.VISIBLE
+
                         presenter.events.observe(viewLifecycleOwner) {
                             setEvents(it)
                             showLoadingProgress(false)
@@ -378,6 +390,9 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
     }
 
     override fun setEvents(events: List<EventViewModel>) {
+        if (simprintsRecordLocked)
+            return
+
         if (events.isEmpty()) {
             binding.emptyTeis.visibility = View.VISIBLE
             binding.teiRecycler.visibility = View.GONE

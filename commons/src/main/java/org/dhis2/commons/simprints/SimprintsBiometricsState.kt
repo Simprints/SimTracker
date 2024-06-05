@@ -21,8 +21,8 @@ data class SimprintsBiometricsState(
     // Biometric enrollment unlocks the newly enrolled beneficiary right away.
     // Non-enrolled (biometrically) TEIs are not Simprints beneficiaries, so they are not locked.
     fun isLocked(millisNow: Long): Boolean = when {
-        simprintsGuid.isNullOrBlank() -> false
-        biometricLockingTimeoutMinutes == null -> false
+        simprintsGuid.isNullOrBlank() -> true
+        biometricLockingTimeoutMinutes == null -> true
         lastBiometricsResultSuccess != true -> true
         lastBiometricsResultTimestamp == null -> true
         millisNow > lastBiometricsResultTimestamp + biometricLockingTimeoutMinutes * 60_000 -> true

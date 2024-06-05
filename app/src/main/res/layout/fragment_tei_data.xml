@@ -62,15 +62,30 @@
                             app:header="@{header}" />
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Similar Simprints biometrics readout and action UI as in the forms in TEI's details -->
-                    <include
-                        android:id="@+id/viewSimprintsBiometrics"
-                        layout="@layout/form_simprints_biometrics"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/simprintsLockedStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_lock_menu"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center"
+                        android:text="Record is Locked" />
+
+                    <TextView
+                        android:id="@+id/simprintsUnlockedStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_lock_open_green"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:visibility="gone"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center"
+                        android:text="Record is UnLocked" />
 
                 </LinearLayout>
-
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/tei_recycler"
@@ -115,6 +130,14 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <!-- Similar Simprints biometrics readout and action UI as in the forms in TEI's details -->
+        <include
+            android:id="@+id/viewSimprintsBiometrics"
+            layout="@layout/form_simprints_biometrics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
