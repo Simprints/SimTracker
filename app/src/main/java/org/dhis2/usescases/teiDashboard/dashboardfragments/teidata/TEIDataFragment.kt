@@ -187,6 +187,7 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                         binding.emptyTeis.visibility = View.GONE
                         binding.teiRecycler.visibility = View.GONE
                     } else {
+                        binding.viewSimprintsBiometrics?.root?.visibility = View.GONE
                         presenter.events.observe(viewLifecycleOwner) {
                             setEvents(it)
                             showLoadingProgress(false)
