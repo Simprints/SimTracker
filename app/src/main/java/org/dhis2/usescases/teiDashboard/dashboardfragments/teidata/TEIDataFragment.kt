@@ -182,8 +182,8 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
             // Simprints biometrics state flow is observed to update the UI reactively
             // TODO() Move this logic to the Presenter/ViewModel
             viewLifecycleOwner.lifecycleScope.launch {
-                simprintsBiometricsRepository.getSimprintsBiometricsStateFlow().collectLatest {
-                    if (it.isLocked(System.currentTimeMillis())) {
+                simprintsBiometricsRepository.getSimprintsBiometricsStateFlow().collectLatest { state ->
+                    if (state.isLocked(System.currentTimeMillis())) {
                         binding.emptyTeis.visibility = View.GONE
                         binding.teiRecycler.visibility = View.GONE
                     } else {
