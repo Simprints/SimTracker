@@ -208,6 +208,11 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                 }
             }
 
+            binding.viewSimprintsBiometrics?.simprintsBiometricsButton?.setOnLongClickListener {
+                binding.viewSimprintsBiometrics.simprintsBiometricsInfoContainer.visibility = View.VISIBLE
+                true
+            }
+
         }.root
     }
 
