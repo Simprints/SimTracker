@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="simprints_biometrics_form_title_status_readout">[Simprints Biometrics Status Readout]</string>
+    <string name="simprints_biometrics_form_tei_uid">TEI UID:</string>
+    <string name="simprints_biometrics_form_guid">Simprints GUID:</string>
+    <string name="simprints_biometrics_form_program_uid">Program UID:</string>
+    <string name="simprints_biometrics_form_project_id">Simprints Project ID:</string>
+    <string name="simprints_biometrics_form_org_unit_uid">Org Unit UID:</string>
+    <string name="simprints_biometrics_form_module_id">Simprints Module ID:</string>
+    <string name="simprints_biometrics_form_user_id">User ID:</string>
+    <string name="simprints_biometrics_form_match_threshold">Match Score Threshold, minimum:</string>
+    <string name="simprints_biometrics_form_locking_timeout_minutes">Biometric Locking Timeout, minutes:</string>
+    <string name="simprints_biometrics_form_latest_attempt_at">Latest biometrics attempt at:</string>
+    <string name="simprints_biometrics_form_latest_success">Latest biometrics success:</string>
+</resources>

@@ -7,7 +7,7 @@
 
         <variable
             name="simprintsBiometricsUiModel"
-            type="org.dhis2.commons.simprints.ui.SimprintsBiometricsUiModel" />
+            type="com.simprints.simprints.ui.SimprintsBiometricsUiModel" />
 
     </data>
 
