@@ -1,5 +1,21 @@
-package org.dhis2.commons.simprints.repository
+package com.simprints.simprints.repository
 
+import com.simprints.simprints.Constants
+import com.simprints.simprints.SimprintsBiometricSearchResult
+import com.simprints.simprints.SimprintsBiometricsAction
+import com.simprints.simprints.SimprintsBiometricsState
+import com.simprints.simprints.repository.datastores.BiometricsResultSuccessRepository
+import com.simprints.simprints.repository.datastores.BiometricsResultTimestampRepository
+import com.simprints.simprints.repository.datastores.SimprintsBeneficiaryGuidRepository
+import com.simprints.simprints.repository.datastores.SimprintsBiometricsProgressRepository
+import com.simprints.simprints.repository.datastores.SimprintsModuleIdRepository
+import com.simprints.simprints.repository.datastores.SimprintsProjectBiometricLockingTimeoutRepository
+import com.simprints.simprints.repository.datastores.SimprintsProjectIdRepository
+import com.simprints.simprints.repository.datastores.SimprintsProjectMatchThresholdRepository
+import com.simprints.simprints.repository.datastores.UserIdRepository
+import com.simprints.simprints.repository.flows.SimprintsBiometricEnrollmentRepository
+import com.simprints.simprints.repository.flows.SimprintsBiometricIdentificationRepository
+import com.simprints.simprints.repository.flows.SimprintsBiometricVerificationRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -8,22 +24,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.dhis2.commons.Constants
-import org.dhis2.commons.simprints.SimprintsBiometricSearchResult
-import org.dhis2.commons.simprints.SimprintsBiometricsAction
-import org.dhis2.commons.simprints.SimprintsBiometricsState
-import org.dhis2.commons.simprints.repository.datastores.BiometricsResultSuccessRepository
-import org.dhis2.commons.simprints.repository.datastores.BiometricsResultTimestampRepository
-import org.dhis2.commons.simprints.repository.datastores.SimprintsBeneficiaryGuidRepository
-import org.dhis2.commons.simprints.repository.datastores.SimprintsBiometricsProgressRepository
-import org.dhis2.commons.simprints.repository.datastores.SimprintsModuleIdRepository
-import org.dhis2.commons.simprints.repository.datastores.SimprintsProjectBiometricLockingTimeoutRepository
-import org.dhis2.commons.simprints.repository.datastores.SimprintsProjectIdRepository
-import org.dhis2.commons.simprints.repository.datastores.SimprintsProjectMatchThresholdRepository
-import org.dhis2.commons.simprints.repository.datastores.UserIdRepository
-import org.dhis2.commons.simprints.repository.flows.SimprintsBiometricEnrollmentRepository
-import org.dhis2.commons.simprints.repository.flows.SimprintsBiometricIdentificationRepository
-import org.dhis2.commons.simprints.repository.flows.SimprintsBiometricVerificationRepository
+
 import org.hisp.dhis.android.core.D2
 
 /**

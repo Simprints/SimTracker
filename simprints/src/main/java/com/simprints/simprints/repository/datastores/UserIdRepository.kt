@@ -1,4 +1,4 @@
-package org.dhis2.commons.simprints.repository.datastores
+package com.simprints.simprints.repository.datastores
 
 import org.hisp.dhis.android.core.D2
 import javax.inject.Inject

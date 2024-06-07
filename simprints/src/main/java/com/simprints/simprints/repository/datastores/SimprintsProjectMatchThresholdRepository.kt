@@ -1,9 +1,9 @@
-package org.dhis2.commons.simprints.repository.datastores
+package com.simprints.simprints.repository.datastores
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import org.dhis2.commons.Constants
+import com.simprints.simprints.Constants
 import org.hisp.dhis.android.core.D2
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package org.dhis2.commons.simprints.ui
+package com.simprints.simprints.ui
 
 interface SimprintsBiometricsUiModelProvider {
 

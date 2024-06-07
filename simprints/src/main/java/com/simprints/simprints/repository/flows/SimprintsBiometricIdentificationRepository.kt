@@ -1,4 +1,4 @@
-package org.dhis2.commons.simprints.repository.flows
+package com.simprints.simprints.repository.flows
 
 import android.content.Context
 import android.content.Intent
@@ -7,29 +7,29 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import com.simprints.libsimprints.Constants
-import com.simprints.libsimprints.Registration
+import com.simprints.libsimprints.Identification
 import com.simprints.libsimprints.SimHelper
+import com.simprints.simprints.repository.flows.SimprintsBiometricConstants.MODULE_ID
+import com.simprints.simprints.repository.flows.SimprintsBiometricConstants.PROJECT_ID
+import com.simprints.simprints.repository.flows.SimprintsBiometricConstants.USER_ID
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import org.dhis2.commons.simprints.repository.flows.SimprintsBiometricConstants.MODULE_ID
-import org.dhis2.commons.simprints.repository.flows.SimprintsBiometricConstants.PROJECT_ID
-import org.dhis2.commons.simprints.repository.flows.SimprintsBiometricConstants.USER_ID
 import javax.inject.Inject
 
-data class SimprintsBiometricEnrollmentResult(
-    val simprintsGuid: String? = null,
-    val biometricsResultSuccess: Boolean? = null,
+data class SimprintsBiometricIdentificationResult(
+    val simprintsGuid: String,
+    val simprintsMatchConfidenceScore: Int,
 )
 
-class SimprintsBiometricEnrollmentRepository @Inject constructor(
+class SimprintsBiometricIdentificationRepository @Inject constructor(
     private val context: Context,
 ) {
 
     private companion object {
         // This SimTracker app, after calling Simprints ID app, may be removed from memory by system
         // so the Simprints ID result is returned by a flow rather than as a function return value.
-        private val enrollmentResultFlow: MutableSharedFlow<SimprintsBiometricEnrollmentResult> =
+        private val identificationResultFlow: MutableSharedFlow<List<SimprintsBiometricIdentificationResult>> =
             MutableSharedFlow(
                 extraBufferCapacity = 1,
                 onBufferOverflow = BufferOverflow.DROP_OLDEST,
@@ -39,12 +39,12 @@ class SimprintsBiometricEnrollmentRepository @Inject constructor(
             this?.getStringExtra(key) ?: ""
     }
 
-    fun getEnrollmentResultFlow(): SharedFlow<SimprintsBiometricEnrollmentResult> =
-        enrollmentResultFlow
+    fun getIdentificationResultFlow(): SharedFlow<List<SimprintsBiometricIdentificationResult>> =
+        identificationResultFlow
 
-    fun launchEnroll(projectId: String, moduleId: String, userId: String) {
+    fun launchIdentify(projectId: String, moduleId: String, userId: String) {
         context.startActivity(
-            Intent(context, SimprintsBiometricEnrollmentHandlingActivity::class.java).apply {
+            Intent(context, SimprintsBiometricIdentificationHandlingActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 putExtra(PROJECT_ID, projectId)
                 putExtra(MODULE_ID, moduleId)
@@ -55,36 +55,41 @@ class SimprintsBiometricEnrollmentRepository @Inject constructor(
 
     // Serves as an Android-specific and Simprints ID-compatible data transporter
     // between this SimTracker and the separate Simprints ID app. Not part of the UI.
-    class SimprintsBiometricEnrollmentHandlingActivity : ComponentActivity() {
+    class SimprintsBiometricIdentificationHandlingActivity : ComponentActivity() {
 
-        private val registerForEnrollResult = registerForActivityResult(
+        private val registerForIdentifyResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
         ) { activityResult ->
             activityResult.data?.takeIf { intent ->
                 intent.getBooleanExtra(Constants.SIMPRINTS_BIOMETRICS_COMPLETE_CHECK, false)
             }?.run {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    getParcelableExtra(Constants.SIMPRINTS_REGISTRATION, Registration::class.java)
+                    getParcelableArrayListExtra(
+                        Constants.SIMPRINTS_IDENTIFICATIONS,
+                        Identification::class.java,
+                    )
                 } else {
                     @Suppress("DEPRECATION")
-                    getParcelableExtra(Constants.SIMPRINTS_REGISTRATION)
+                    getParcelableArrayListExtra(Constants.SIMPRINTS_IDENTIFICATIONS)
                 }
-            }?.guid.let { guid ->
-                enrollmentResultFlow.tryEmit(
-                    SimprintsBiometricEnrollmentResult(
-                        simprintsGuid = guid,
-                        biometricsResultSuccess = guid != null,
-                    ),
-                )
+            }?.mapNotNull { identification ->
+                identification?.takeIf { it.guid != null }?.let {
+                    SimprintsBiometricIdentificationResult(
+                        simprintsGuid = identification.guid,
+                        simprintsMatchConfidenceScore = identification.confidence.toInt(),
+                    )
+                }
+            }.let { results ->
+                identificationResultFlow.tryEmit(results ?: emptyList())
             }
             finish()
         }
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            registerForEnrollResult.launch(
+            registerForIdentifyResult.launch(
                 with(intent) {
-                    SimHelper(get(PROJECT_ID), get(USER_ID)).register(get(MODULE_ID))
+                    SimHelper(get(PROJECT_ID), get(USER_ID)).identify(get(MODULE_ID))
                 },
             )
         }

@@ -1,4 +1,4 @@
-package org.dhis2.commons.simprints.repository.flows
+package com.simprints.simprints.repository.flows
 
 // Keys for intents for data to send to the separate Simprints ID app
 internal object SimprintsBiometricConstants {

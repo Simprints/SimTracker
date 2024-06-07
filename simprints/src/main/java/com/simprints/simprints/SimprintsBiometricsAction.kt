@@ -1,4 +1,4 @@
-package org.dhis2.commons.simprints
+package com.simprints.simprints
 
 // Whether the biometrics action button passes command to open
 // Simprints ID for enrollment, verification or identification,

@@ -1,4 +1,4 @@
-package org.dhis2.commons.simprints.repository.datastores
+package com.simprints.simprints.repository.datastores
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

@@ -1,11 +1,11 @@
-package org.dhis2.commons.simprints.ui
+package com.simprints.simprints.ui
 
 import androidx.databinding.ObservableField
+import com.simprints.simprints.SimprintsBiometricsAction
+import com.simprints.simprints.SimprintsBiometricsState
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.dhis2.commons.simprints.SimprintsBiometricsAction
-import org.dhis2.commons.simprints.SimprintsBiometricsState
 import java.text.SimpleDateFormat
 
 // Reactively updating Simprints biometrics readout UI on state's flow updates, by using ViewBinding

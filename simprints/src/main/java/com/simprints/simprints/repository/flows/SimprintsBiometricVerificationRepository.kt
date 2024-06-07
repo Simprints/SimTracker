@@ -1,4 +1,4 @@
-package org.dhis2.commons.simprints.repository.flows
+package com.simprints.simprints.repository.flows
 
 import android.content.Context
 import android.content.Intent
@@ -9,13 +9,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.simprints.libsimprints.Constants
 import com.simprints.libsimprints.SimHelper
 import com.simprints.libsimprints.Verification
+import com.simprints.simprints.repository.flows.SimprintsBiometricConstants.GUID
+import com.simprints.simprints.repository.flows.SimprintsBiometricConstants.MODULE_ID
+import com.simprints.simprints.repository.flows.SimprintsBiometricConstants.PROJECT_ID
+import com.simprints.simprints.repository.flows.SimprintsBiometricConstants.USER_ID
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import org.dhis2.commons.simprints.repository.flows.SimprintsBiometricConstants.GUID
-import org.dhis2.commons.simprints.repository.flows.SimprintsBiometricConstants.MODULE_ID
-import org.dhis2.commons.simprints.repository.flows.SimprintsBiometricConstants.PROJECT_ID
-import org.dhis2.commons.simprints.repository.flows.SimprintsBiometricConstants.USER_ID
 import javax.inject.Inject
 
 data class SimprintsBiometricVerificationResult(

@@ -1,4 +1,4 @@
-package org.dhis2.commons.simprints
+package com.simprints.simprints
 
 // State of biometrics of a Simprints beneficiary / DHIS2 TEI. Properties availability: best effort.
 data class SimprintsBiometricsState(

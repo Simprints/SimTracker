@@ -1,6 +1,6 @@
-package org.dhis2.commons.simprints.repository.datastores
+package com.simprints.simprints.repository.datastores
 
-import org.dhis2.commons.Constants.SIMPRINTS_GUID
+import com.simprints.simprints.Constants.SIMPRINTS_GUID
 import org.hisp.dhis.android.core.D2
 import javax.inject.Inject
 

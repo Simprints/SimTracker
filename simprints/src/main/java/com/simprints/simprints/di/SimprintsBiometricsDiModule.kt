@@ -1,4 +1,4 @@
-package org.dhis2.commons.simprints.di
+package com.simprints.simprints.di
 
 import com.google.gson.Gson
 import dagger.Module
