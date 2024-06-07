@@ -1,9 +1,10 @@
 package org.dhis2;
 
+import com.simprints.simprints.di.SimprintsBiometricsDiModule;
+
 import org.dhis2.commons.featureconfig.di.FeatureConfigModule;
 import org.dhis2.commons.network.NetworkUtils;
 import org.dhis2.commons.network.NetworkUtilsModule;
-import org.dhis2.commons.simprints.di.SimprintsBiometricsDiModule;
 import org.dhis2.data.dispatcher.DispatcherModule;
 import org.dhis2.data.forms.dataentry.validation.ValidatorModule;
 import org.dhis2.commons.locationprovider.LocationModule;
@@ -53,7 +54,8 @@ import dispatch.core.DispatcherProvider;
         DispatcherModule.class,
         FeatureConfigModule.class,
         NetworkUtilsModule.class,
-        CustomDispatcherModule.class
+        CustomDispatcherModule.class,
+        SimprintsBiometricsDiModule.class
 })
 public  interface AppComponent {
 
@@ -79,6 +81,8 @@ public  interface AppComponent {
 
         Builder customDispatcher(CustomDispatcherModule dispatcherProvider);
 
+        Builder simprintsBiometricsDiModule(SimprintsBiometricsDiModule simprintsBiometricsDiModule);
+
         AppComponent build();
     }
 
@@ -97,7 +101,6 @@ public  interface AppComponent {
     LocationProvider locationProvider();
 
     NetworkUtils networkUtilsProvider();
-
     DispatcherProvider customDispatcherProvider();
 
     //injection targets

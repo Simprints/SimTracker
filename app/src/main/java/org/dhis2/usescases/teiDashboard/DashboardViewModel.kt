@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
+import com.simprints.simprints.ui.SimprintsBiometricsUiModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
-import org.dhis2.commons.simprints.ui.SimprintsBiometricsUiModel
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.utils.AuthorityException
 import org.dhis2.utils.analytics.ACTIVE_FOLLOW_UP

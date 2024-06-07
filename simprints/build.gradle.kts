@@ -27,20 +27,21 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 
     buildFeatures {
-        compose = true
         dataBinding = true
     }
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.desugar)
 
     api(libs.dhis2.android.sdk) {
         exclude("org.hisp.dhis", "core-rules")
@@ -54,6 +55,8 @@ dependencies {
 
     api(libs.dhis2.expressionparser)
 
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
     implementation(libs.dagger.hilt.android)
     implementation(libs.libsimprints)
     implementation(libs.androidx.coreKtx)

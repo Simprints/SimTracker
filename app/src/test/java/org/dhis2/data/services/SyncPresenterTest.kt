@@ -1,9 +1,9 @@
 package org.dhis2.data.services
 
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import org.dhis2.commons.prefs.PreferenceProvider
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.data.service.SyncPresenterImpl
 import org.dhis2.data.service.SyncRepository
 import org.dhis2.data.service.SyncResult

@@ -4,9 +4,9 @@ import android.text.TextWatcher
 import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.simprints.simprints.ui.SimprintsBiometricsUiModelProvider
 import org.dhis2.commons.bindings.clipWithAllRoundedCorners
 import org.dhis2.commons.bindings.dp
-import org.dhis2.commons.simprints.ui.SimprintsBiometricsUiModelProvider
 import org.dhis2.form.BR
 import org.dhis2.form.R
 import org.dhis2.form.model.FieldUiModel

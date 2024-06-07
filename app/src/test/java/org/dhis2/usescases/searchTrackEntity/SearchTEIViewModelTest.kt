@@ -2,6 +2,8 @@ package org.dhis2.usescases.searchTrackEntity
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.mapbox.geojson.BoundingBox
+import com.simprints.simprints.SimprintsBiometricsState
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -11,8 +13,6 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.dhis2.commons.network.NetworkUtils
 import org.dhis2.commons.resources.ResourceManager
-import org.dhis2.commons.simprints.SimprintsBiometricsState
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.data.search.SearchParametersModel
 import org.dhis2.form.model.FieldUiModel

@@ -1,13 +1,13 @@
 package org.dhis2.usescases.teiDashboard
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.setMain
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.utils.analytics.ACTIVE_FOLLOW_UP
 import org.dhis2.utils.analytics.AnalyticsHelper

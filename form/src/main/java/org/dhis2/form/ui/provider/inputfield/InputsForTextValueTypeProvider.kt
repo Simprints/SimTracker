@@ -15,9 +15,9 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.databinding.DataBindingUtil
+import com.simprints.simprints.databinding.FormSimprintsBiometricsBinding
 import org.dhis2.form.BR
 import org.dhis2.form.R
-import org.dhis2.form.databinding.FormSimprintsBiometricsBinding
 import org.dhis2.form.extensions.autocompleteList
 import org.dhis2.form.extensions.inputState
 import org.dhis2.form.extensions.legend

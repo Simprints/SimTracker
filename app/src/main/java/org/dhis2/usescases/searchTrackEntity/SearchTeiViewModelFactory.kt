@@ -2,9 +2,9 @@ package org.dhis2.usescases.searchTrackEntity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.network.NetworkUtils
 import org.dhis2.commons.resources.ResourceManager
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.form.ui.provider.DisplayNameProvider
 import org.dhis2.maps.usecases.MapStyleConfiguration

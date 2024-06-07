@@ -1,9 +1,9 @@
 package org.dhis2.form.ui
 
+import com.simprints.simprints.SimprintsBiometricsAction
+import com.simprints.simprints.SimprintsBiometricsState
 import kotlinx.coroutines.flow.StateFlow
 import org.dhis2.commons.orgunitselector.OrgUnitSelectorScope
-import org.dhis2.commons.simprints.SimprintsBiometricsAction
-import org.dhis2.commons.simprints.SimprintsBiometricsState
 import org.dhis2.form.model.EventCategory
 import org.dhis2.form.model.FieldUiModel
 import org.dhis2.form.model.OptionSetConfiguration
