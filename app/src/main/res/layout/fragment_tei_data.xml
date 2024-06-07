@@ -62,28 +62,9 @@
                             app:header="@{header}" />
                     </androidx.cardview.widget.CardView>
 
-                    <TextView
-                        android:id="@+id/simprintsLockedStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_lock_menu"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center"
-                        android:text="Record is Locked" />
-
-                    <TextView
-                        android:id="@+id/simprintsUnlockedStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_lock_open_green"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:visibility="gone"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center"
-                        android:text="Record is UnLocked" />
+                    <include
+                        android:id="@+id/biometric_locked_status"
+                        layout="@layout/tei_biometric_lock_details" />
 
                 </LinearLayout>
 

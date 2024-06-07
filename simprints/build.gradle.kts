@@ -48,7 +48,7 @@ dependencies {
         exclude("com.facebook.flipper")
         this.isChanging = true
     }
-    
+
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
     implementation(libs.dagger.hilt.android)

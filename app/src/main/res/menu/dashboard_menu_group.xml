@@ -26,7 +26,7 @@
         android:title="@string/show_events_timeline"/>
     <item
         android:id="@+id/complete"
-        android:icon="@drawable/ic_lock_menu"
+        android:icon="@drawable/ic_lock_closed_red"
         android:title="@string/complete" />
     <item
         android:id="@+id/activate"
