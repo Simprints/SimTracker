@@ -12,4 +12,7 @@
     <string name="simprints_biometrics_form_locking_timeout_minutes">Biometric Locking Timeout, minutes:</string>
     <string name="simprints_biometrics_form_latest_attempt_at">Latest biometrics attempt at:</string>
     <string name="simprints_biometrics_form_latest_success">Latest biometrics success:</string>
+    <string name="simprints_locked_verify_tei_biometrically_to_unlock">Locked. Verify TEI biometrically to unlock.</string>
+    <string name="record_is_locked">Record is Locked</string>
+    <string name="record_is_unlocked">Record is Unlocked</string>
 </resources>

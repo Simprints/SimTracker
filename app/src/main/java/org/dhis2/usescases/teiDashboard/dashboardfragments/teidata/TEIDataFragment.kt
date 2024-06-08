@@ -202,7 +202,7 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                                 View.GONE
                             binding.biometricLockedStatus?.findViewById<TextView>(R.id.simprintsUnlockedStatus)?.visibility =
                                 View.VISIBLE
-                            
+
                             presenter.events.observe(viewLifecycleOwner) {
                                 setEvents(it)
                                 showLoadingProgress(false)

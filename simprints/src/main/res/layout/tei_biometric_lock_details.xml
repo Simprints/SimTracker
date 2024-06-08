@@ -13,7 +13,7 @@
         android:paddingEnd="16dp"
         android:gravity="center_vertical"
         android:layout_gravity="center"
-        android:text="Record is Locked" />
+        android:text="@string/record_is_locked" />
 
     <TextView
         android:id="@+id/simprintsUnlockedStatus"
@@ -25,6 +25,6 @@
         android:visibility="gone"
         android:gravity="center_vertical"
         android:layout_gravity="center"
-        android:text="Record is UnLocked" />
+        android:text="@string/record_is_unlocked" />
 
 </LinearLayout>
