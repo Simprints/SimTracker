@@ -18,6 +18,7 @@ import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import com.simprints.simprints.repository.flows.SimprintsBiometricEnrollmentRepository
 import com.simprints.simprints.repository.flows.SimprintsBiometricIdentificationRepository
 import com.simprints.simprints.repository.flows.SimprintsBiometricVerificationRepository
+import com.simprints.simprints.touchpoints.app.usescases.teidashboard.SimprintsTEIDataViewModelFactory
 import org.hisp.dhis.android.core.D2Manager
 import javax.inject.Singleton
 
@@ -112,5 +113,13 @@ class SimprintsBiometricsDiModule {
     @Singleton
     fun resultSuccessRepository(): BiometricsResultSuccessRepository {
         return BiometricsResultSuccessRepository(d2 = D2Manager.getD2())
+    }
+
+    @Provides
+    @Singleton
+    fun simprintsTeiDataViewModelFactory(
+        simprintsBiometricsRepository: SimprintsBiometricsRepository,
+    ): SimprintsTEIDataViewModelFactory {
+        return SimprintsTEIDataViewModelFactory(simprintsBiometricsRepository)
     }
 }
