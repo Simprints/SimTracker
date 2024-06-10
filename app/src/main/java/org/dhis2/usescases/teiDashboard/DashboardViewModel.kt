@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.simprints.simprints.repository.SimprintsBiometricsRepository
-import com.simprints.simprints.ui.SimprintsBiometricsUiModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,10 +20,9 @@ import org.hisp.dhis.android.core.enrollment.EnrollmentStatus
 import timber.log.Timber
 
 class DashboardViewModel(
-    private val repository: DashboardRepository,
-    private val simprintsBiometricsRepository: SimprintsBiometricsRepository,
-    private val analyticsHelper: AnalyticsHelper,
-    private val dispatcher: DispatcherProvider,
+        private val repository: DashboardRepository,
+        private val analyticsHelper: AnalyticsHelper,
+        private val dispatcher: DispatcherProvider,
 ) : ViewModel() {
 
     private val eventUid = MutableLiveData<String>()
@@ -44,25 +41,6 @@ class DashboardViewModel(
     private var _state = MutableStateFlow<State?>(null)
     val state = _state.asStateFlow()
 
-    // One TEI is viewed at a time, so its Simprints biometrics state model updates on each new TEI.
-
-    private val teiToSimprintsBiometricsUiModelMap: MutableMap<String, SimprintsBiometricsUiModel> =
-        mutableMapOf()
-
-    fun getSimprintsBiometricsUiModel(
-        teiUid: String,
-        programUid: String,
-    ): SimprintsBiometricsUiModel =
-        teiToSimprintsBiometricsUiModelMap.getOrPut(teiUid) {
-            teiToSimprintsBiometricsUiModelMap.clear()
-            SimprintsBiometricsUiModel(
-                simprintsBiometricsRepository.getSimprintsBiometricsStateFlow(
-                    teiUid,
-                    programUid,
-                ),
-                simprintsBiometricsRepository::dispatchSimprintsAction,
-            )
-        }
 
     private val _dashboardModel = MutableLiveData<DashboardModel>()
     var dashboardModel: LiveData<DashboardModel> = _dashboardModel

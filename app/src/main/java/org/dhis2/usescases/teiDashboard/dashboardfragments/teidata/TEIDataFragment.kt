@@ -102,9 +102,6 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
     lateinit var cardMapper: TEIEventCardMapper
 
     @Inject
-    lateinit var simprintsBiometricsRepository: SimprintsBiometricsRepository
-
-    @Inject
     lateinit var simprintsTEIDataViewModelFactory: SimprintsTEIDataViewModelFactory
     private val simprintsViewModel: SimprintsTEIDataViewModel by viewModels {
         simprintsTEIDataViewModelFactory
@@ -163,19 +160,6 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                 }
 
                 dashboardModel.observe(viewLifecycleOwner) {
-                    // View binding for Simprints biometrics readout & action button UI, same as in TEI details
-                    it.trackedEntityInstance.uid()?.let { teiUid ->
-                        programUid?.run {
-                            binding.viewSimprintsBiometrics?.setVariable(
-                                BR.simprintsBiometricsUiModel,
-                                dashboardViewModel.getSimprintsBiometricsUiModel(
-                                    teiUid,
-                                    programUid = this,
-                                ),
-                            )
-                        }
-                    }
-
                     if (sharedPreferences.getString(PREF_COMPLETED_EVENT, null) != null) {
                         presenter.displayGenerateEvent(
                             sharedPreferences.getString(
@@ -190,7 +174,6 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
 
             simprintsViewModel.biometricLockState.observe(viewLifecycleOwner){ recordLocked ->
                 if (recordLocked) {
-
                     binding.viewSimprintsBiometrics?.root?.visibility = View.VISIBLE
                     binding.biometricLockedStatus?.findViewById<TextView>(R.id.simprintsLockedStatus)?.visibility =
                             View.VISIBLE
@@ -213,10 +196,20 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                 }
             }
 
-            binding.viewSimprintsBiometrics?.simprintsBiometricsButton?.setOnLongClickListener {
-                binding.viewSimprintsBiometrics.simprintsBiometricsInfoContainer.visibility =
-                    View.VISIBLE
-                true
+            binding.viewSimprintsBiometrics?.let { simprintsData ->
+                dashboardViewModel.dashboardModel.observe(viewLifecycleOwner) { dashboardModel ->
+                    simprintsData.setVariable(
+                        BR.simprintsBiometricsUiModel,
+                        simprintsViewModel.getSimprintsBiometricsUiModel(
+                            dashboardModel.trackedEntityInstance.uid(),
+                            programUid = programUid,
+                        ))
+                }
+
+                simprintsData.simprintsBiometricsButton.setOnLongClickListener {
+                    simprintsData.simprintsBiometricsInfoContainer.visibility = View.VISIBLE
+                    true
+                }
             }
 
         }.root

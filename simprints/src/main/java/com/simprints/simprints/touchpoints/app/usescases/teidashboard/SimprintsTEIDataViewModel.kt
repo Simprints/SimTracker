@@ -4,9 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.simprints.simprints.repository.SimprintsBiometricsRepository
+import com.simprints.simprints.ui.SimprintsBiometricsUiModel
 import kotlinx.coroutines.launch
 
-class SimprintsTEIDataViewModel (
+class SimprintsTEIDataViewModel(
         private val simprintsBiometricsRepository: SimprintsBiometricsRepository
 ) : ViewModel() {
 
@@ -22,4 +23,14 @@ class SimprintsTEIDataViewModel (
         }
     }
 
+    fun getSimprintsBiometricsUiModel(
+            teiUid: String,
+            programUid: String?,
+    ): SimprintsBiometricsUiModel = SimprintsBiometricsUiModel(
+            simprintsBiometricsRepository.getSimprintsBiometricsStateFlow(
+                    teiUid,
+                    programUid,
+            ),
+            simprintsBiometricsRepository::dispatchSimprintsAction,
+    )
 }
