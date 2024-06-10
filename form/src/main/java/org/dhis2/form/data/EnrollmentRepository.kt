@@ -7,7 +7,6 @@ import io.reactivex.Single
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.dhis2.commons.Constants.SIMPRINTS_GUID
 import org.dhis2.commons.date.DateUtils
 import org.dhis2.commons.orgunitselector.OrgUnitSelectorScope
 import org.dhis2.form.data.metadata.EnrollmentConfiguration
@@ -203,15 +202,7 @@ class EnrollmentRepository(
         that preserves indentation of params of .create(...); the goal: keep the diff addition-only.
         This is needed because the Simprints biometrics UI required a dedicated type of field form.
          */
-        var fieldViewModel = fieldFactory.takeIf {
-            attribute.shortName() == SIMPRINTS_GUID
-        }?.createForSimprintsBiometrics(
-            attribute.uid(),
-            dataValue ?: "",
-            sectionUid,
-            teiStateFlow = simprintsBiometricsStateFlow,
-            onInteraction = simprintsBiometricsActionFlow::tryEmit,
-        ) ?: fieldFactory.create(
+        var fieldViewModel = fieldFactory.create(
             attribute.uid(), // indentation of these params is preserved
             attribute.displayFormName() ?: "",
             valueType!!,

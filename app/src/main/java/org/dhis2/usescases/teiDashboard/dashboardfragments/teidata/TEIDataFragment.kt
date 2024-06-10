@@ -116,12 +116,13 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
 
     private var showAllEnrollment = false
     private var programUid: String? = null
+    private lateinit var teiUid: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         with(requireArguments()) {
             programUid = getString("PROGRAM_UID")
-            val teiUid = getString("TEI_UID")
+            teiUid = getString("TEI_UID")
                 ?: throw NullPointerException("A TEI uid is required to launch fragment")
             val enrollmentUid = getString("ENROLLMENT_UID") ?: ""
             app().dashboardComponent()?.plus(
@@ -200,10 +201,8 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                 dashboardViewModel.dashboardModel.observe(viewLifecycleOwner) { dashboardModel ->
                     simprintsData.setVariable(
                         BR.simprintsBiometricsUiModel,
-                        simprintsViewModel.getSimprintsBiometricsUiModel(
-                            dashboardModel.trackedEntityInstance.uid(),
-                            programUid = programUid,
-                        ))
+                        simprintsViewModel.getSimprintsBiometricsUiModel(teiUid),
+                    )
                 }
 
                 simprintsData.simprintsBiometricsButton.setOnLongClickListener {

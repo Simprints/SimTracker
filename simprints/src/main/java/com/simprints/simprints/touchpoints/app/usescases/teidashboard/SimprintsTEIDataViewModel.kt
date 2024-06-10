@@ -23,14 +23,10 @@ class SimprintsTEIDataViewModel(
         }
     }
 
-    fun getSimprintsBiometricsUiModel(
-            teiUid: String,
-            programUid: String?,
-    ): SimprintsBiometricsUiModel = SimprintsBiometricsUiModel(
-            simprintsBiometricsRepository.getSimprintsBiometricsStateFlow(
-                    teiUid,
-                    programUid,
-            ),
+    fun getSimprintsBiometricsUiModel(teiUid: String): SimprintsBiometricsUiModel = SimprintsBiometricsUiModel(
+            simprintsBiometricsRepository,
+            teiUid,
             simprintsBiometricsRepository::dispatchSimprintsAction,
+            viewModelScope
     )
 }

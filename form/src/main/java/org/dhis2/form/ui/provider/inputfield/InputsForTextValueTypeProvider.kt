@@ -1,7 +1,5 @@
 package org.dhis2.form.ui.provider.inputfield
 
-import android.content.Context
-import android.view.LayoutInflater
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,21 +8,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.databinding.DataBindingUtil
-import com.simprints.simprints.databinding.FormSimprintsBiometricsBinding
-import org.dhis2.form.BR
-import org.dhis2.form.R
 import org.dhis2.form.extensions.autocompleteList
 import org.dhis2.form.extensions.inputState
 import org.dhis2.form.extensions.legend
 import org.dhis2.form.extensions.supportingText
 import org.dhis2.form.model.FieldUiModel
 import org.dhis2.form.model.UiRenderType
-import org.dhis2.form.model.simprints.SimprintsBiometricsAttributeWrapperUiModel
 import org.dhis2.form.ui.event.RecyclerViewUiEvents
 import org.dhis2.form.ui.intent.FormIntent
 import org.hisp.dhis.mobile.ui.designsystem.component.InputBarCode
@@ -42,19 +33,6 @@ internal fun ProvideInputsForValueTypeText(
     focusManager: FocusManager,
     onNextClicked: () -> Unit,
 ) {
-    if (fieldUiModel is SimprintsBiometricsAttributeWrapperUiModel) {
-        val context: Context = LocalContext.current
-        val inflater = LayoutInflater.from(context)
-        val binding: FormSimprintsBiometricsBinding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.form_simprints_biometrics,
-            null,
-            false,
-        )
-        binding.setVariable(BR.simprintsBiometricsUiModel, fieldUiModel.getSimprintsBiometricsUiModel())
-        AndroidView(factory = { binding.root }, modifier = Modifier.fillMaxWidth())
-        return
-    }
 
     when (fieldUiModel.renderingType) {
         UiRenderType.QR_CODE, UiRenderType.GS1_DATAMATRIX -> {

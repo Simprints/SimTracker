@@ -4,7 +4,6 @@ import android.text.TextWatcher
 import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.simprints.simprints.ui.SimprintsBiometricsUiModelProvider
 import org.dhis2.commons.bindings.clipWithAllRoundedCorners
 import org.dhis2.commons.bindings.dp
 import org.dhis2.form.BR
@@ -47,10 +46,6 @@ class FormViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHo
         binding.setVariable(BR.textWatcher, textWatcher)
         binding.setVariable(BR.coordinateWatcher, coordinateTextWatcher)
         binding.setVariable(BR.item, uiModel)
-        // Simprints biometrics is viewed in its own UI field type
-        if (uiModel is SimprintsBiometricsUiModelProvider) {
-            binding.setVariable(BR.simprintsBiometricsUiModel, uiModel.getSimprintsBiometricsUiModel())
-        }
         binding.executePendingBindings()
     }
 

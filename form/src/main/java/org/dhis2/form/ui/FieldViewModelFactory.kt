@@ -54,11 +54,4 @@ interface FieldViewModelFactory {
 
     fun createClosingSection(): FieldUiModel
 
-    fun createForSimprintsBiometrics(
-        id: String,
-        value: String,
-        programStageSection: String? = null,
-        teiStateFlow: StateFlow<SimprintsBiometricsState>,
-        onInteraction: (SimprintsBiometricsAction) -> Unit,
-    ): FieldUiModel
 }

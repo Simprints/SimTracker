@@ -45,7 +45,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{simprintsBiometricsUiModel.teiUid}" />
+                    android:text="@{simprintsBiometricsUiModel.liveBiometricsState.teiUid}" />
 
             </LinearLayout>
 
@@ -63,7 +63,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{simprintsBiometricsUiModel.simprintsGuid}" />
+                    android:text="@{simprintsBiometricsUiModel.liveBiometricsState.simprintsGuid}" />
 
             </LinearLayout>
 
@@ -81,7 +81,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{simprintsBiometricsUiModel.programUid}" />
+                    android:text="@{simprintsBiometricsUiModel.liveBiometricsState.programUid}" />
 
             </LinearLayout>
 
@@ -99,7 +99,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{simprintsBiometricsUiModel.simprintsProjectId}" />
+                    android:text="@{simprintsBiometricsUiModel.liveBiometricsState.simprintsProjectId}" />
 
             </LinearLayout>
 
@@ -117,7 +117,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{simprintsBiometricsUiModel.orgUnitUid}" />
+                    android:text="@{simprintsBiometricsUiModel.liveBiometricsState.orgUnitUid}" />
 
             </LinearLayout>
 
@@ -135,7 +135,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{simprintsBiometricsUiModel.simprintsModuleId}" />
+                    android:text="@{simprintsBiometricsUiModel.liveBiometricsState.simprintsModuleId}" />
 
             </LinearLayout>
 
@@ -153,7 +153,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{simprintsBiometricsUiModel.userId}" />
+                    android:text="@{simprintsBiometricsUiModel.liveBiometricsState.userId}" />
 
             </LinearLayout>
 
@@ -171,7 +171,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{simprintsBiometricsUiModel.simprintsMatchThreshold}" />
+                    android:text="@{simprintsBiometricsUiModel.liveBiometricsState.simprintsMatchThreshold.toString()}" />
 
             </LinearLayout>
 
@@ -207,7 +207,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{simprintsBiometricsUiModel.lastBiometricsTime}" />
+                    android:text="@{simprintsBiometricsUiModel.liveBiometricsState.lastBiometricsResultTimestamp.toString()}" />
 
             </LinearLayout>
 
@@ -226,7 +226,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{simprintsBiometricsUiModel.lastBiometricsSuccess}" />
+                    android:text="@{simprintsBiometricsUiModel.liveBiometricsState.lastBiometricsResultSuccess.toString()}" />
 
             </LinearLayout>
         </LinearLayout>
@@ -235,9 +235,8 @@
             android:id="@+id/simprints_biometrics_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="@{simprintsBiometricsUiModel.simprintsBiometricActionAvailability}"
             android:onClick="@{() -> simprintsBiometricsUiModel.onClick()}"
-            android:text="@{simprintsBiometricsUiModel.simprintsBiometricActionName}" />
+            android:text="@{simprintsBiometricsUiModel.teiIsEnrolled}" />
 
     </LinearLayout>
 
