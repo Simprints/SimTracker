@@ -20,12 +20,16 @@ import kotlin.coroutines.CoroutineContext
 data class SimprintsBiometricsUiModel(
         private val repo: SimprintsBiometricsRepository,
         val teiUID: String,
+        val programUID: String?,
         val onInteraction: (SimprintsBiometricsAction) -> Unit,
         private val coroutineScope: CoroutineScope
 ) {
 
     fun onClick() {
-        onInteraction(SimprintsBiometricsAction(isOneToMany = false))
+        if (teiIsEnrolled.get() == "Enroll")
+            onInteraction(SimprintsBiometricsAction(isOneToMany = true))
+        else if (!programUID.isNullOrBlank())
+            repo.requestSimprintsIdVerification(teiUID, programUID)
     }
 
     val liveBiometricsState = ObservableField<SimprintsBiometricsState>()

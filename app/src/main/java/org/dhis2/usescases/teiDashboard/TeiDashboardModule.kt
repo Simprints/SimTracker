@@ -128,6 +128,6 @@ class TeiDashboardModule(
         analyticsHelper: AnalyticsHelper,
         dispatcher: DispatcherProvider,
     ): DashboardViewModelFactory {
-        return DashboardViewModelFactory(repository, simprintsBiometricsRepository, analyticsHelper, dispatcher)
+        return DashboardViewModelFactory(repository, analyticsHelper, dispatcher)
     }
 }

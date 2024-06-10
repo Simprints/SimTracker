@@ -32,140 +32,146 @@ import org.hisp.dhis.android.core.D2
  * reactive Simprints-related data (from multiple sources) as unified source of truth.
  */
 class SimprintsBiometricsRepository(
-    private val d2: D2,
-    coroutineScope: CoroutineScope,
-    private val guidRepository: SimprintsBeneficiaryGuidRepository,
-    private val moduleIdRepository: SimprintsModuleIdRepository,
-    private val lockingTimeoutRepository: SimprintsProjectBiometricLockingTimeoutRepository,
-    private val projectIdRepository: SimprintsProjectIdRepository,
-    private val thresholdRepository: SimprintsProjectMatchThresholdRepository,
-    private val userIdRepository: UserIdRepository,
-    private val progressRepository: SimprintsBiometricsProgressRepository,
-    private val resultTimestampRepository: BiometricsResultTimestampRepository,
-    private val resultSuccessRepository: BiometricsResultSuccessRepository,
-    private val enrollmentRepository: SimprintsBiometricEnrollmentRepository,
-    private val verificationRepository: SimprintsBiometricVerificationRepository,
-    private val identificationRepository: SimprintsBiometricIdentificationRepository,
+        private val d2: D2,
+        coroutineScope: CoroutineScope,
+        private val guidRepository: SimprintsBeneficiaryGuidRepository,
+        private val moduleIdRepository: SimprintsModuleIdRepository,
+        private val lockingTimeoutRepository: SimprintsProjectBiometricLockingTimeoutRepository,
+        private val projectIdRepository: SimprintsProjectIdRepository,
+        private val thresholdRepository: SimprintsProjectMatchThresholdRepository,
+        private val userIdRepository: UserIdRepository,
+        private val progressRepository: SimprintsBiometricsProgressRepository,
+        private val resultTimestampRepository: BiometricsResultTimestampRepository,
+        private val resultSuccessRepository: BiometricsResultSuccessRepository,
+        private val enrollmentRepository: SimprintsBiometricEnrollmentRepository,
+        private val verificationRepository: SimprintsBiometricVerificationRepository,
+        private val identificationRepository: SimprintsBiometricIdentificationRepository,
 ) {
 
     // Simprints biometrics state for the currently accessed TEI as a beneficiary (if defined),
     // with best-effort data completeness based on what the data sources for its fields provide.
     private val biometricsStateFlow: MutableStateFlow<SimprintsBiometricsState> =
-        MutableStateFlow(SimprintsBiometricsState())
+            MutableStateFlow(SimprintsBiometricsState())
 
     // Biometric search result events as the results of Simprints identification (one-o-many).
     private val biometricSearchResultFlow: MutableSharedFlow<SimprintsBiometricSearchResult> =
-        MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+            MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     init {
         coroutineScope.launch {
             enrollmentRepository.getEnrollmentResultFlow()
-                .collect { (simprintsGuid, biometricsResultSuccess) ->
-                    val (teiUid, programUid) = progressRepository.getSimprintsBiometricsFinished()
-                    val biometricsResultTimestamp = System.currentTimeMillis()
-                    if (teiUid != null && simprintsGuid != null) {
-                        guidRepository.setSimprintsGuid(teiUid, simprintsGuid)
-                        resultTimestampRepository
-                            .setResultTimestamp(teiUid, timestamp = biometricsResultTimestamp)
-                        resultSuccessRepository
-                            .setResultSuccess(teiUid, success = biometricsResultSuccess)
+                    .collect { (simprintsGuid, biometricsResultSuccess) ->
+                        val (teiUid, programUid) = progressRepository.getSimprintsBiometricsFinished()
+                        val biometricsResultTimestamp = System.currentTimeMillis()
+                        if (teiUid != null && simprintsGuid != null) {
+                            guidRepository.setSimprintsGuid(teiUid, simprintsGuid)
+                            resultTimestampRepository
+                                    .setResultTimestamp(teiUid, timestamp = biometricsResultTimestamp)
+                            resultSuccessRepository
+                                    .setResultSuccess(teiUid, success = biometricsResultSuccess)
+                        }
+                        if (teiUid == biometricsStateFlow.value.teiUid) {
+                            biometricsStateFlow.value =
+                                    biometricsStateFlow.value.copy(
+                                            simprintsGuid = simprintsGuid,
+                                            programUid = programUid,
+                                            lastBiometricsResultTimestamp = biometricsResultTimestamp,
+                                            lastBiometricsResultSuccess = biometricsResultSuccess,
+                                    )
+                        }
                     }
-                    if (teiUid == biometricsStateFlow.value.teiUid) {
-                        biometricsStateFlow.value =
-                            biometricsStateFlow.value.copy(
-                                simprintsGuid = simprintsGuid,
-                                programUid = programUid,
-                                lastBiometricsResultTimestamp = biometricsResultTimestamp,
-                                lastBiometricsResultSuccess = biometricsResultSuccess,
-                            )
-                    }
-                }
         }
         coroutineScope.launch {
             verificationRepository.getVerificationResultFlow()
-                .collect { (simprintsMatchConfidenceScore) ->
-                    val (teiUid, programUid) = progressRepository.getSimprintsBiometricsFinished()
-                    val biometricsResultTimestamp = System.currentTimeMillis()
-                    val biometricsResultSuccess = if (teiUid != null) {
-                        val projectMatchThreshold =
-                            thresholdRepository.getSimprintsMatchThreshold(programUid)
-                        projectMatchThreshold != null &&
-                            simprintsMatchConfidenceScore != null &&
-                            simprintsMatchConfidenceScore >= projectMatchThreshold
-                    } else {
-                        false
+                    .collect { (simprintsMatchConfidenceScore) ->
+                        val (teiUid, programUid) = progressRepository.getSimprintsBiometricsFinished()
+                        val biometricsResultTimestamp = System.currentTimeMillis()
+                        val biometricsResultSuccess = if (teiUid != null) {
+                            val projectMatchThreshold =
+                                    thresholdRepository.getSimprintsMatchThreshold(programUid)
+                            projectMatchThreshold != null &&
+                                    simprintsMatchConfidenceScore != null &&
+                                    simprintsMatchConfidenceScore >= projectMatchThreshold
+                        } else {
+                            false
+                        }
+                        resultTimestampRepository
+                                .setResultTimestamp(teiUid, timestamp = biometricsResultTimestamp)
+                        resultSuccessRepository
+                                .setResultSuccess(teiUid, success = biometricsResultSuccess)
+                        if (teiUid == biometricsStateFlow.value.teiUid) {
+                            biometricsStateFlow.value =
+                                    biometricsStateFlow.value.copy(
+                                            lastBiometricsResultTimestamp = biometricsResultTimestamp,
+                                            lastBiometricsResultSuccess = biometricsResultSuccess,
+                                    )
+                        }
                     }
-                    resultTimestampRepository
-                        .setResultTimestamp(teiUid, timestamp = biometricsResultTimestamp)
-                    resultSuccessRepository
-                        .setResultSuccess(teiUid, success = biometricsResultSuccess)
-                    if (teiUid == biometricsStateFlow.value.teiUid) {
-                        biometricsStateFlow.value =
-                            biometricsStateFlow.value.copy(
-                                lastBiometricsResultTimestamp = biometricsResultTimestamp,
-                                lastBiometricsResultSuccess = biometricsResultSuccess,
-                            )
-                    }
-                }
         }
         coroutineScope.launch {
             identificationRepository.getIdentificationResultFlow()
-                .collect { identifications ->
-                    val (_, programUid) = progressRepository.getSimprintsBiometricsFinished()
-                    val biometricsResultTimestamp = System.currentTimeMillis()
-                    val projectMatchThreshold =
-                        thresholdRepository.getSimprintsMatchThreshold(programUid) ?: 0
-                    identifications.filter { (_, simprintsMatchConfidenceScore) ->
-                        simprintsMatchConfidenceScore >= projectMatchThreshold
-                    }.sortedByDescending { (_, simprintsMatchConfidenceScore) ->
-                        simprintsMatchConfidenceScore
-                    }.map { (simprintsGuid, _) ->
-                        simprintsGuid
-                    }.run(guidRepository::getExistingGuidsPairedToTeiUids).map { (guid, teiUid) ->
-                        resultTimestampRepository
-                            .setResultTimestamp(teiUid, timestamp = biometricsResultTimestamp)
-                        resultSuccessRepository
-                            .setResultSuccess(teiUid, success = true)
-                        guid
-                    }.run {
-                        SimprintsBiometricSearchResult(
-                            timestamp = biometricsResultTimestamp,
-                            teiUids = this,
-                        )
-                    }.run(biometricSearchResultFlow::tryEmit)
-                }
+                    .collect { identifications ->
+                        val (_, programUid) = progressRepository.getSimprintsBiometricsFinished()
+                        val biometricsResultTimestamp = System.currentTimeMillis()
+                        val projectMatchThreshold =
+                                thresholdRepository.getSimprintsMatchThreshold(programUid) ?: 0
+                        identifications.filter { (_, simprintsMatchConfidenceScore) ->
+                            simprintsMatchConfidenceScore >= projectMatchThreshold
+                        }.sortedByDescending { (_, simprintsMatchConfidenceScore) ->
+                            simprintsMatchConfidenceScore
+                        }.map { (simprintsGuid, _) ->
+                            simprintsGuid
+                        }.run(guidRepository::getExistingGuidsPairedToTeiUids).map { (guid, teiUid) ->
+                            resultTimestampRepository
+                                    .setResultTimestamp(teiUid, timestamp = biometricsResultTimestamp)
+                            resultSuccessRepository
+                                    .setResultSuccess(teiUid, success = true)
+                            guid
+                        }.run {
+                            SimprintsBiometricSearchResult(
+                                    timestamp = biometricsResultTimestamp,
+                                    teiUids = this,
+                            )
+                        }.run(biometricSearchResultFlow::tryEmit)
+                    }
         }
     }
 
     fun getSimprintsGuidAttributeUids(): List<String> =
-        guidRepository.getSimprintsGuidAttributeUids()
+            guidRepository.getSimprintsGuidAttributeUids()
 
     fun getSimprintsBiometricsStateFlow(
-        teiUid: String? = null,
-        programUid: String? = null,
-        enrollmentUid: String? = null,
+            teiUid: String? = null,
+            programUid: String? = null,
+            enrollmentUid: String? = null,
     ): StateFlow<SimprintsBiometricsState> =
-        biometricsStateFlow.apply {
-            if (teiUid != null && teiUid != value.teiUid ||
-                programUid != null && programUid != value.programUid ||
-                enrollmentUid != null && enrollmentUid != value.programUid
-            ) {
-                value = getTeiState(teiUid, programUid, enrollmentUid)
+            biometricsStateFlow.apply {
+                if (teiUid != null && teiUid != value.teiUid ||
+                        programUid != null && programUid != value.programUid ||
+                        enrollmentUid != null && enrollmentUid != value.programUid
+                ) {
+                    value = getTeiState(teiUid, programUid, enrollmentUid)
+                }
             }
-        }
 
     fun getBiometricSearchResultFlow(programUid: String?): Flow<List<String>> =
-        biometricSearchResultFlow.map { result ->
-            guidRepository.getTeiUidsInProgram(result.teiUids, programUid)
-        }
+            biometricSearchResultFlow.map { result ->
+                guidRepository.getTeiUidsInProgram(result.teiUids, programUid)
+            }
 
     fun isBiometricIdentificationAvailable(programUid: String?): Boolean =
-        projectIdRepository.getSimprintsProjectId(programUid) != null &&
-            thresholdRepository.getSimprintsMatchThreshold(programUid) != null &&
-            userIdRepository.getUserId() != null &&
-            getSimprintsGuidAttributeUids().isNotEmpty()
+            projectIdRepository.getSimprintsProjectId(programUid) != null &&
+                    thresholdRepository.getSimprintsMatchThreshold(programUid) != null &&
+                    userIdRepository.getUserId() != null &&
+                    getSimprintsGuidAttributeUids().isNotEmpty()
+
+    fun getOrgUnitId(teiUid: String): String? =
+            d2.trackedEntityModule().trackedEntityInstances().byUid()
+                    .eq(teiUid).blockingGet().firstOrNull()?.organisationUnit()
 
     fun dispatchSimprintsAction(action: SimprintsBiometricsAction) {
+        projectIdRepository.getSimprintsProjectId(biometricsStateFlow.value.programUid) ?: return
+
         with(biometricsStateFlow.value) {
             progressRepository.setSimprintsBiometricsInProgress(teiUid, programUid)
         }
@@ -177,35 +183,47 @@ class SimprintsBiometricsRepository(
 
                 action.isOneToMany -> {
                     identificationRepository.launchIdentify(
-                        projectId = simprintsProjectId,
-                        userId = userId,
-                        moduleId = simprintsModuleId ?: "default",
+                            projectId = simprintsProjectId,
+                            userId = userId,
+                            moduleId = simprintsModuleId ?: "default",
                     )
                 }
 
                 simprintsGuid == null -> {
                     enrollmentRepository.launchEnroll(
-                        projectId = simprintsProjectId,
-                        userId = userId,
-                        moduleId = simprintsModuleId ?: "default",
+                            projectId = simprintsProjectId,
+                            userId = userId,
+                            moduleId = simprintsModuleId ?: "default",
                     )
                 }
 
                 else -> {
                     verificationRepository.launchVerify(
-                        projectId = simprintsProjectId,
-                        userId = userId,
-                        moduleId = simprintsModuleId ?: "default",
-                        guid = simprintsGuid,
+                            projectId = simprintsProjectId,
+                            userId = userId,
+                            moduleId = simprintsModuleId ?: "default",
+                            guid = simprintsGuid,
                     )
                 }
             }
         }
     }
 
+    fun requestSimprintsIdVerification(
+            teiUid: String,
+            programUid: String,
+    ) {
+        verificationRepository.launchVerify(
+                projectIdRepository.getSimprintsProjectId(programUid) ?: return,
+                moduleIdRepository.getSimprintsModuleId(getOrgUnitId(teiUid)) ?: return,
+                userIdRepository.getUserId() ?: return,
+                guidRepository.getSimprintsGuid(teiUid) ?: return
+        )
+    }
+
     fun downSyncSimprintsConfigs() {
         d2.dataStoreModule().dataStoreDownloader()
-            .byNamespace().eq(Constants.SIMPRINTS_NAMESPACE).blockingDownload()
+                .byNamespace().eq(Constants.SIMPRINTS_NAMESPACE).blockingDownload()
         moduleIdRepository.clearCache()
         lockingTimeoutRepository.clearCache()
         projectIdRepository.clearCache()
@@ -216,27 +234,27 @@ class SimprintsBiometricsRepository(
     }
 
     private fun getTeiState(
-        teiUid: String?,
-        programUid: String?,
-        enrollmentUid: String?,
+            teiUid: String?,
+            programUid: String?,
+            enrollmentUid: String?,
     ): SimprintsBiometricsState {
         val orgUnitUid =
-            d2.trackedEntityModule().trackedEntityInstances().byUid()
-                .eq(teiUid)
-                .blockingGet().firstOrNull()?.organisationUnit()
+                d2.trackedEntityModule().trackedEntityInstances().byUid()
+                        .eq(teiUid)
+                        .blockingGet().firstOrNull()?.organisationUnit()
         return SimprintsBiometricsState(
-            teiUid = teiUid,
-            simprintsGuid = teiUid?.let { guidRepository.getSimprintsGuid(teiUid) },
-            programUid = programUid,
-            enrollmentUid = enrollmentUid,
-            simprintsProjectId = projectIdRepository.getSimprintsProjectId(programUid),
-            orgUnitUid = orgUnitUid,
-            simprintsModuleId = moduleIdRepository.getSimprintsModuleId(orgUnitUid),
-            userId = userIdRepository.getUserId(),
-            simprintsMatchThreshold = thresholdRepository.getSimprintsMatchThreshold(programUid),
-            biometricLockingTimeoutMinutes = lockingTimeoutRepository.getTimeoutMinutes(programUid),
-            lastBiometricsResultTimestamp = resultTimestampRepository.getResultTimestamp(teiUid),
-            lastBiometricsResultSuccess = resultSuccessRepository.getResultSuccess(teiUid),
+                teiUid = teiUid,
+                simprintsGuid = teiUid?.let { guidRepository.getSimprintsGuid(teiUid) },
+                programUid = programUid,
+                enrollmentUid = enrollmentUid,
+                simprintsProjectId = projectIdRepository.getSimprintsProjectId(programUid),
+                orgUnitUid = orgUnitUid,
+                simprintsModuleId = moduleIdRepository.getSimprintsModuleId(orgUnitUid),
+                userId = userIdRepository.getUserId(),
+                simprintsMatchThreshold = thresholdRepository.getSimprintsMatchThreshold(programUid),
+                biometricLockingTimeoutMinutes = lockingTimeoutRepository.getTimeoutMinutes(programUid),
+                lastBiometricsResultTimestamp = resultTimestampRepository.getResultTimestamp(teiUid),
+                lastBiometricsResultSuccess = resultSuccessRepository.getResultSuccess(teiUid),
         )
     }
 }
