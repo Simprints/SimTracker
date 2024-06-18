@@ -8,7 +8,7 @@ import com.simprints.simprints.ui.SimprintsBiometricsUiModel
 import kotlinx.coroutines.launch
 
 class SimprintsTEIDataViewModel(
-        private val simprintsBiometricsRepository: SimprintsBiometricsRepository
+    private val simprintsBiometricsRepository: SimprintsBiometricsRepository
 ) : ViewModel() {
 
     var simprintsRecordLocked = true
@@ -24,13 +24,13 @@ class SimprintsTEIDataViewModel(
     }
 
     fun getSimprintsBiometricsUiModel(
-            teiUid: String,
-            programUid: String?,
+        teiUid: String,
+        programUid: String?,
     ): SimprintsBiometricsUiModel = SimprintsBiometricsUiModel(
-            simprintsBiometricsRepository.getSimprintsBiometricsStateFlow(
-                    teiUid,
-                    programUid,
-            ),
-            simprintsBiometricsRepository::dispatchSimprintsAction,
+        simprintsBiometricsRepository.getSimprintsBiometricsStateFlow(
+            teiUid,
+            programUid,
+        ),
+        simprintsBiometricsRepository::dispatchSimprintsAction,
     )
 }

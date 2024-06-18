@@ -1,10 +1,7 @@
 package com.simprints.simprints.di
 
 import com.google.gson.Gson
-import dagger.Module
-import dagger.Provides
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import com.simprints.simprints.repository.datastores.BiometricsResultSuccessRepository
 import com.simprints.simprints.repository.datastores.BiometricsResultTimestampRepository
 import com.simprints.simprints.repository.datastores.SimprintsBeneficiaryGuidRepository
@@ -14,11 +11,14 @@ import com.simprints.simprints.repository.datastores.SimprintsProjectBiometricLo
 import com.simprints.simprints.repository.datastores.SimprintsProjectIdRepository
 import com.simprints.simprints.repository.datastores.SimprintsProjectMatchThresholdRepository
 import com.simprints.simprints.repository.datastores.UserIdRepository
-import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import com.simprints.simprints.repository.flows.SimprintsBiometricEnrollmentRepository
 import com.simprints.simprints.repository.flows.SimprintsBiometricIdentificationRepository
 import com.simprints.simprints.repository.flows.SimprintsBiometricVerificationRepository
 import com.simprints.simprints.touchpoints.app.usescases.teidashboard.SimprintsTEIDataViewModelFactory
+import dagger.Module
+import dagger.Provides
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import org.hisp.dhis.android.core.D2Manager
 import javax.inject.Singleton
 

@@ -37,10 +37,10 @@ class SimprintsBeneficiaryGuidRepository @Inject constructor(
     fun getTeiUidsInProgram(simprintsGuids: List<String>, programUid: String?): List<String> =
         getExistingGuidsPairedToTeiUids(simprintsGuids).filter { (_, teiUid) ->
             programUid == null ||
-                !d2.trackedEntityModule().trackedEntityInstances()
-                    .byUid().eq(teiUid)
-                    .byProgramUids(listOfNotNull(programUid))
-                    .blockingIsEmpty()
+                    !d2.trackedEntityModule().trackedEntityInstances()
+                        .byUid().eq(teiUid)
+                        .byProgramUids(listOfNotNull(programUid))
+                        .blockingIsEmpty()
         }.map { (_, teiUid) ->
             teiUid
         }

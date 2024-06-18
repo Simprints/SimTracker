@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.simprints.simprints.repository.SimprintsBiometricsRepository
 
 @Suppress("UNCHECKED_CAST")
-class SimprintsTEIDataViewModelFactory (
+class SimprintsTEIDataViewModelFactory(
     private val simprintsBiometricsRepository: SimprintsBiometricsRepository
-): ViewModelProvider.Factory {
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return SimprintsTEIDataViewModel(simprintsBiometricsRepository) as T

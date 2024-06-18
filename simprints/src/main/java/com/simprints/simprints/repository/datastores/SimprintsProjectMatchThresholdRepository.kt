@@ -33,7 +33,8 @@ class SimprintsProjectMatchThresholdRepository @Inject constructor(
         val matchConfidenceScoreThreshold: Int? = null,
     )
 
-    private val cachedMappings: MutableMap<String, List<ProjectMatchThresholdMapping>> = mutableMapOf()
+    private val cachedMappings: MutableMap<String, List<ProjectMatchThresholdMapping>> =
+        mutableMapOf()
 
     fun getSimprintsMatchThreshold(programUid: String?): Int? =
         d2.dataStoreModule().dataStore()
@@ -41,7 +42,10 @@ class SimprintsProjectMatchThresholdRepository @Inject constructor(
             .blockingGet()?.value()?.run {
                 cachedMappings.getOrPut(this) {
                     cachedMappings.clear()
-                    gson.fromJson(this, object : TypeToken<List<ProjectMatchThresholdMapping>>() {}.type)
+                    gson.fromJson(
+                        this,
+                        object : TypeToken<List<ProjectMatchThresholdMapping>>() {}.type
+                    )
                 }.find {
                     it.programUid == programUid
                 }?.matchConfidenceScoreThreshold?.coerceAtLeast(0)
