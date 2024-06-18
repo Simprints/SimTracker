@@ -11,7 +11,7 @@ import javax.inject.Inject
  * Reads and writes of Simprints GUIDs are done via DHIS2 SDK, and are persisting to device storage.
  * Modification of a TEI's Simprints GUID will mark that TEI as syncable, as usually in a DHIS2 app.
  * Syncing that TEI will write the new state of their Simprints GUID to the DHIS2 instance backend,
- * so other instances of this SimTracker app can then sync the new Simprints GUID to themselves
+ * so other instances of this SimCapture app can then sync the new Simprints GUID to themselves
  * and they then can use biometrics integration with Simprints ID for that TEI as well.
  */
 class SimprintsBeneficiaryGuidRepository @Inject constructor(

@@ -10,7 +10,7 @@ private typealias TeiUidToProgramUid = Pair<String?, String?>
 /**
  * Local-only, DHIS2 SDK-based, persisting single key-value entry storage
  * for keeping record of one run of the separate Simprints ID app for an Activity result
- * while this SimTracker app is in the background and at risk of being removed from memory by system
+ * while this SimCapture app is in the background and at risk of being removed from memory by system
  */
 class SimprintsBiometricsProgressRepository @Inject constructor(
     private val d2: D2,

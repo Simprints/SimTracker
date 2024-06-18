@@ -8,7 +8,7 @@ import org.hisp.dhis.android.core.D2
 import javax.inject.Inject
 
 /**
- * Healthcare programs in this SimTracker app, and in DHIS2 in general,
+ * Healthcare programs in this SimCapture app, and in DHIS2 in general,
  * can be mapped to Simprints ID projects, and for each of them there can be a separate setting for:
  * for how long to consider a TEI's profile unlocked by the means of Simprints biometrics.
  *
@@ -19,7 +19,7 @@ import javax.inject.Inject
  * each consisting of string key-values,
  * among keys of which there are programUid and biometricLockingTimeoutMinutes.
  *
- * In the SimTracker app, these mappings are persisted on device storage by the DHIS2 SDK read-only;
+ * In the SimCapture app, these mappings are persisted on device storage by the DHIS2 SDK read-only;
  * this repository is not responsible for mappings syncing from the DHIS2 backend to device storage.
  */
 class SimprintsProjectBiometricLockingTimeoutRepository @Inject constructor(
