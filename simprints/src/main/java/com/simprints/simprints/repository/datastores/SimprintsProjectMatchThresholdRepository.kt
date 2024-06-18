@@ -44,7 +44,7 @@ class SimprintsProjectMatchThresholdRepository @Inject constructor(
                     cachedMappings.clear()
                     gson.fromJson(
                         this,
-                        object : TypeToken<List<ProjectMatchThresholdMapping>>() {}.type
+                        object : TypeToken<List<ProjectMatchThresholdMapping>>() {}.type,
                     )
                 }.find {
                     it.programUid == programUid

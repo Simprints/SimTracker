@@ -305,8 +305,8 @@ class EnrollmentRepository(
         enrollmentDataList.add(
             getEnrollmentDataSection(
                 conf.program()?.displayName(),
-                conf.program()?.description()
-            )
+                conf.program()?.description(),
+            ),
         )
 
         enrollmentDataList.add(

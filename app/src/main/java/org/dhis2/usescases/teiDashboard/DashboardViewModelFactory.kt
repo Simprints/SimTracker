@@ -16,9 +16,9 @@ class DashboardViewModelFactory(
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return DashboardViewModel(
-                repository,
-                analyticsHelper,
-                dispatcher,
+            repository,
+            analyticsHelper,
+            dispatcher,
         ) as T
     }
 }

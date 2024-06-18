@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
 
-
 data class SimprintsBiometricEnrollmentResult(
     val simprintsGuid: String? = null,
     val biometricsResultSuccess: Boolean? = null,

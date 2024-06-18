@@ -20,9 +20,9 @@ import org.hisp.dhis.android.core.enrollment.EnrollmentStatus
 import timber.log.Timber
 
 class DashboardViewModel(
-        private val repository: DashboardRepository,
-        private val analyticsHelper: AnalyticsHelper,
-        private val dispatcher: DispatcherProvider,
+    private val repository: DashboardRepository,
+    private val analyticsHelper: AnalyticsHelper,
+    private val dispatcher: DispatcherProvider,
 ) : ViewModel() {
 
     private val eventUid = MutableLiveData<String>()
@@ -40,7 +40,6 @@ class DashboardViewModel(
 
     private var _state = MutableStateFlow<State?>(null)
     val state = _state.asStateFlow()
-
 
     private val _dashboardModel = MutableLiveData<DashboardModel>()
     var dashboardModel: LiveData<DashboardModel> = _dashboardModel

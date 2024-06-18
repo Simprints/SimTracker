@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-
 import org.hisp.dhis.android.core.D2
 
 /**
@@ -90,8 +89,8 @@ class SimprintsBiometricsRepository(
                         val projectMatchThreshold =
                             thresholdRepository.getSimprintsMatchThreshold(programUid)
                         projectMatchThreshold != null &&
-                                simprintsMatchConfidenceScore != null &&
-                                simprintsMatchConfidenceScore >= projectMatchThreshold
+                            simprintsMatchConfidenceScore != null &&
+                            simprintsMatchConfidenceScore >= projectMatchThreshold
                     } else {
                         false
                     }
@@ -161,9 +160,9 @@ class SimprintsBiometricsRepository(
 
     fun isBiometricIdentificationAvailable(programUid: String?): Boolean =
         projectIdRepository.getSimprintsProjectId(programUid) != null &&
-                thresholdRepository.getSimprintsMatchThreshold(programUid) != null &&
-                userIdRepository.getUserId() != null &&
-                getSimprintsGuidAttributeUids().isNotEmpty()
+            thresholdRepository.getSimprintsMatchThreshold(programUid) != null &&
+            userIdRepository.getUserId() != null &&
+            getSimprintsGuidAttributeUids().isNotEmpty()
 
     fun dispatchSimprintsAction(action: SimprintsBiometricsAction) {
         with(biometricsStateFlow.value) {

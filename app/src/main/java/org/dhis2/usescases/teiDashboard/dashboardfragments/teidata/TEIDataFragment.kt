@@ -16,22 +16,17 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.snackbar.Snackbar
-import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import com.simprints.simprints.touchpoints.app.usescases.teidashboard.SimprintsTEIDataViewModel
 import com.simprints.simprints.touchpoints.app.usescases.teidashboard.SimprintsTEIDataViewModelFactory
-import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import org.dhis2.R
 import org.dhis2.bindings.app
 import org.dhis2.commons.Constants
@@ -172,22 +167,22 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                 }
             }
 
-            simprintsViewModel.biometricLockState.observe(viewLifecycleOwner){ recordLocked ->
+            simprintsViewModel.biometricLockState.observe(viewLifecycleOwner) { recordLocked ->
                 if (recordLocked) {
                     binding.viewSimprintsBiometrics?.root?.visibility = View.VISIBLE
                     binding.biometricLockedStatus?.findViewById<TextView>(R.id.simprintsLockedStatus)?.visibility =
-                            View.VISIBLE
+                        View.VISIBLE
                     binding.biometricLockedStatus?.findViewById<TextView>(R.id.simprintsUnlockedStatus)?.visibility =
-                            View.GONE
+                        View.GONE
 
                     binding.emptyTeis.visibility = View.GONE
                     binding.teiRecycler.visibility = View.GONE
                 } else {
                     binding.viewSimprintsBiometrics?.root?.visibility = View.GONE
                     binding.biometricLockedStatus?.findViewById<TextView>(R.id.simprintsLockedStatus)?.visibility =
-                            View.GONE
+                        View.GONE
                     binding.biometricLockedStatus?.findViewById<TextView>(R.id.simprintsUnlockedStatus)?.visibility =
-                            View.VISIBLE
+                        View.VISIBLE
 
                     presenter.events.observe(viewLifecycleOwner) {
                         setEvents(it)
@@ -203,7 +198,8 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                         simprintsViewModel.getSimprintsBiometricsUiModel(
                             dashboardModel.trackedEntityInstance.uid(),
                             programUid = programUid,
-                        ))
+                        ),
+                    )
                 }
 
                 simprintsData.simprintsBiometricsButton.setOnLongClickListener {
@@ -211,7 +207,6 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                     true
                 }
             }
-
         }.root
     }
 
@@ -394,8 +389,9 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
     }
 
     override fun setEvents(events: List<EventViewModel>) {
-        if (simprintsViewModel.simprintsRecordLocked)
+        if (simprintsViewModel.simprintsRecordLocked) {
             return
+        }
 
         if (events.isEmpty()) {
             binding.emptyTeis.visibility = View.VISIBLE
