@@ -70,11 +70,11 @@ android {
     testNamespace = "org.dhis2.test"
 
     base {
-        archivesName.set("simtracker-dhis2-v" + libs.versions.vName.get())
+        archivesName.set("simcapture-dhis2-v" + libs.versions.vName.get())
     }
 
     defaultConfig {
-        applicationId = "com.dhis2"
+        applicationId = "com.simprints.dhis2"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.sdk.get().toInt()
         versionCode = libs.versions.vCode.get().toInt()
@@ -242,7 +242,7 @@ android {
                         else -> ""
                     }
 
-                    output.outputFileName = "simtracker-v${libs.versions.vName.get()}$suffix.apk"
+                    output.outputFileName = "simcapture-v${libs.versions.vName.get()}$suffix.apk"
                 }
             }
 

@@ -1,7 +1,7 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">ឌីអេចអាយអេសធូ (DHIS 2)</string>
-    <string name="logo_text">ឌីអេចអាយអេសធូ (DHIS 2)</string>
+    <string name="app_name">SimCapture</string>
+    <string name="logo_text">simcapture</string>
     <string name="logo_number">លេខពីរ</string>
     <!-- Warnings and error messages -->
     <string name="error">កំហុសបច្ចេកទេស</string>

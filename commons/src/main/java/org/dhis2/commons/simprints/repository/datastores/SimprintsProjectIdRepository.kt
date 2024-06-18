@@ -8,7 +8,7 @@ import org.hisp.dhis.android.core.D2
 import javax.inject.Inject
 
 /**
- * Healthcare programs in this SimTracker app, and in DHIS2 in general,
+ * Healthcare programs in this SimCapture app, and in DHIS2 in general,
  * can be mapped to Simprints ID projects.
  *
  * In a DHIS2 instance backend, the linkages between DHIS2 programs and Simprints projects
@@ -17,7 +17,7 @@ import javax.inject.Inject
  * under the namespace simprints and key projectIdMapping, as an array or JSON objects
  * each consisting of string key-values, among keys of which there are programUid and projectId.
  *
- * In the SimTracker app, these mappings are persisted on device storage by the DHIS2 SDK read-only;
+ * In the SimCapture app, these mappings are persisted on device storage by the DHIS2 SDK read-only;
  * this repository is not responsible for mappings syncing from the DHIS2 backend to device storage.
  */
 class SimprintsProjectIdRepository @Inject constructor(

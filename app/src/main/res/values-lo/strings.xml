@@ -1,7 +1,7 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">ລະບົບ DHIS2</string>
-    <string name="logo_text">ລະບົບຂໍ້ມູນຂ່າວສານດ້ານສຸຂະພາບຂັ້ນເມືອງ</string>
+    <string name="app_name">SimCapture</string>
+    <string name="logo_text">simcapture</string>
     <string name="logo_number">2</string>
     <!-- Warnings and error messages -->
     <string name="error">ເກີດການຜິດພາດ</string>
