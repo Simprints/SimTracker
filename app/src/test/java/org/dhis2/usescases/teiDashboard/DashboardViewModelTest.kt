@@ -147,26 +147,22 @@ class DashboardViewModelTest {
         }
     }
 
-    private fun getViewModel() = DashboardViewModel(
-            repository,
-            analyticsHelper,
-            object :
-                DispatcherProvider {
-                override fun io(): CoroutineDispatcher {
-                    return testingDispatcher
-                }
+    private fun getViewModel() =
+        DashboardViewModel(repository, analyticsHelper, object : DispatcherProvider {
+            override fun io(): CoroutineDispatcher {
+                return testingDispatcher
+            }
 
-                override fun computation(): CoroutineDispatcher {
-                    return testingDispatcher
-                }
+            override fun computation(): CoroutineDispatcher {
+                return testingDispatcher
+            }
 
-                override fun ui(): CoroutineDispatcher {
-                    return testingDispatcher
-                }
-            },
-    ).also {
-        testingDispatcher.scheduler.advanceUntilIdle()
-    }
+            override fun ui(): CoroutineDispatcher {
+                return testingDispatcher
+            }
+        }).also {
+            testingDispatcher.scheduler.advanceUntilIdle()
+        }
 
     private fun mockEnrollmentModel() {
         whenever(repository.getDashboardModel()) doReturn mockedEnrollmentModel
