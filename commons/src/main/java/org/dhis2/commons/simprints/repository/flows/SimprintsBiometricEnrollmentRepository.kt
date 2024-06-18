@@ -27,7 +27,7 @@ class SimprintsBiometricEnrollmentRepository @Inject constructor(
 ) {
 
     private companion object {
-        // This SimTracker app, after calling Simprints ID app, may be removed from memory by system
+        // This SimCapture app, after calling Simprints ID app, may be removed from memory by system
         // so the Simprints ID result is returned by a flow rather than as a function return value.
         private val enrollmentResultFlow: MutableSharedFlow<SimprintsBiometricEnrollmentResult> =
             MutableSharedFlow(
@@ -54,7 +54,7 @@ class SimprintsBiometricEnrollmentRepository @Inject constructor(
     }
 
     // Serves as an Android-specific and Simprints ID-compatible data transporter
-    // between this SimTracker and the separate Simprints ID app. Not part of the UI.
+    // between this SimCapture and the separate Simprints ID app. Not part of the UI.
     class SimprintsBiometricEnrollmentHandlingActivity : ComponentActivity() {
 
         private val registerForEnrollResult = registerForActivityResult(

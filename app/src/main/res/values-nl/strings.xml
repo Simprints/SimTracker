@@ -1,7 +1,7 @@
 <resources>
     <!--GENERAL-->
-    <string name="app_name">SimTracker</string>
-    <string name="logo_text">simtracker</string>
+    <string name="app_name">SimCapture</string>
+    <string name="logo_text">simcapture</string>
     <string name="logo_number">2</string>
     <!-- Warnings and error messages -->
     <string name="error">Fout</string>

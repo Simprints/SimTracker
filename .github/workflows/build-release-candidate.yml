@@ -62,4 +62,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.repository_name }} - Android APK
-        path: ${{ env.main_project_module }}/build/outputs/apk/dhis/release/simtracker-v${{ steps.read-version.outputs.vName }}.apk
+        path: ${{ env.main_project_module }}/build/outputs/apk/dhis/release/simcapture-v${{ steps.read-version.outputs.vName }}.apk

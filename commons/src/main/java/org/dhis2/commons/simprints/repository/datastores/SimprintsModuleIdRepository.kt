@@ -7,7 +7,7 @@ import org.hisp.dhis.android.core.D2
 import javax.inject.Inject
 
 /**
- * Healthcare organizational or geographical areas in this SimTracker app, and in DHIS2 in general,
+ * Healthcare organizational or geographical areas in this SimCapture app, and in DHIS2 in general,
  * are organizational units, and in Simprints ID they are modules.
  *
  * In a DHIS2 instance backend, the linkages between DHIS2 org units and Simprints modules
@@ -16,7 +16,7 @@ import javax.inject.Inject
  * under the namespace simprints and key moduleIdMapping, as an array or JSON objects
  * each consisting of two string key-values with keys orgUnitUid and moduleId.
  *
- * In the SimTracker app, these mappings are persisted on device storage by the DHIS2 SDK read-only;
+ * In the SimCapture app, these mappings are persisted on device storage by the DHIS2 SDK read-only;
  * this repository is not responsible for mappings syncing from the DHIS2 backend to device storage.
  *
  * Org units are hierarchically structured. If an org unit has no Simprints module ID,

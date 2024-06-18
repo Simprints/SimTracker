@@ -3,7 +3,7 @@ name: Sync from Upstream
 on:
   schedule:
     - cron: '0 6 * * MON' # on Mondays at 06:00 UTC
-  workflow_dispatch: # or manually, at https://github.com/Simprints/SimTracker/actions/workflows/sync-from-upstream.yml
+  workflow_dispatch: # or manually, at https://github.com/Simprints/SimCapture/actions/workflows/sync-from-upstream.yml
 
 jobs:
   sync-from-upstream:
@@ -14,7 +14,7 @@ jobs:
       - uses: tgymnich/fork-sync@v1.8
         with:
           owner: Simprints
-          repo: SimTracker
+          repo: SimCapture
           base: main
           head: main
           pr_title: |
@@ -22,7 +22,7 @@ jobs:
           pr_message: |
             These changes, independently made by UiO in upstream at https://github.com/dhis2/dhis2-android-capture-app/tree/main, are to be merged into `main` after a human review.
             
-            _For your reference, this Action's config can be viewed [here](https://github.com/Simprints/SimTracker/blob/main/.github/workflows/sync-from-upstream.yml), and the run logs [here](https://github.com/Simprints/SimTracker/actions/workflows/sync-from-upstream.yml)._
+            _For your reference, this Action's config can be viewed [here](https://github.com/Simprints/SimCapture/blob/main/.github/workflows/sync-from-upstream.yml), and the run logs [here](https://github.com/Simprints/SimCapture/actions/workflows/sync-from-upstream.yml)._
             
             Approve & Merge if the changes are OK. If you add modifications, get someone else to approve them.
           auto_merge: false
