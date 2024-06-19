@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.map
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,6 +22,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.snackbar.Snackbar
+import com.simprints.simprints.touchpoints.app.usescases.teidashboard.SimprintsTEIDataViewModel
+import com.simprints.simprints.touchpoints.app.usescases.teidashboard.SimprintsTEIDataViewModelFactory
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
@@ -92,6 +96,12 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
     @Inject
     lateinit var cardMapper: TEIEventCardMapper
 
+    @Inject
+    lateinit var simprintsTEIDataViewModelFactory: SimprintsTEIDataViewModelFactory
+    private val simprintsViewModel: SimprintsTEIDataViewModel by viewModels {
+        simprintsTEIDataViewModelFactory
+    }
+
     private var eventAdapter: EventAdapter? = null
     private var dialog: CustomDialog? = null
     private var programStageFromEvent: ProgramStage? = null
@@ -145,19 +155,6 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                 }
 
                 dashboardModel.observe(viewLifecycleOwner) {
-                    // View binding for Simprints biometrics readout & action button UI, same as in TEI details
-                    it.trackedEntityInstance.uid()?.let { teiUid ->
-                        programUid?.run {
-                            binding.viewSimprintsBiometrics?.setVariable(
-                                BR.simprintsBiometricsUiModel,
-                                dashboardViewModel.getSimprintsBiometricsUiModel(
-                                    teiUid,
-                                    programUid = this,
-                                ),
-                            )
-                        }
-                    }
-
                     if (sharedPreferences.getString(PREF_COMPLETED_EVENT, null) != null) {
                         presenter.displayGenerateEvent(
                             sharedPreferences.getString(
@@ -170,9 +167,45 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
                 }
             }
 
-            presenter.events.observe(viewLifecycleOwner) {
-                setEvents(it)
-                showLoadingProgress(false)
+            simprintsViewModel.biometricLockState.observe(viewLifecycleOwner) { recordLocked ->
+                if (recordLocked) {
+                    binding.viewSimprintsBiometrics?.root?.visibility = View.VISIBLE
+                    binding.biometricLockedStatus?.findViewById<TextView>(R.id.simprintsLockedStatus)?.visibility =
+                        View.VISIBLE
+                    binding.biometricLockedStatus?.findViewById<TextView>(R.id.simprintsUnlockedStatus)?.visibility =
+                        View.GONE
+
+                    binding.emptyTeis.visibility = View.GONE
+                    binding.teiRecycler.visibility = View.GONE
+                } else {
+                    binding.viewSimprintsBiometrics?.root?.visibility = View.GONE
+                    binding.biometricLockedStatus?.findViewById<TextView>(R.id.simprintsLockedStatus)?.visibility =
+                        View.GONE
+                    binding.biometricLockedStatus?.findViewById<TextView>(R.id.simprintsUnlockedStatus)?.visibility =
+                        View.VISIBLE
+
+                    presenter.events.observe(viewLifecycleOwner) {
+                        setEvents(it)
+                        showLoadingProgress(false)
+                    }
+                }
+            }
+
+            binding.viewSimprintsBiometrics?.let { simprintsData ->
+                dashboardViewModel.dashboardModel.observe(viewLifecycleOwner) { dashboardModel ->
+                    simprintsData.setVariable(
+                        BR.simprintsBiometricsUiModel,
+                        simprintsViewModel.getSimprintsBiometricsUiModel(
+                            dashboardModel.trackedEntityInstance.uid(),
+                            programUid = programUid,
+                        ),
+                    )
+                }
+
+                simprintsData.simprintsBiometricsButton.setOnLongClickListener {
+                    simprintsData.simprintsBiometricsInfoContainer.visibility = View.VISIBLE
+                    true
+                }
             }
         }.root
     }
@@ -356,6 +389,10 @@ class TEIDataFragment : FragmentGlobalAbstract(), TEIDataContracts.View {
     }
 
     override fun setEvents(events: List<EventViewModel>) {
+        if (simprintsViewModel.simprintsRecordLocked) {
+            return
+        }
+
         if (events.isEmpty()) {
             binding.emptyTeis.visibility = View.VISIBLE
             binding.teiRecycler.visibility = View.GONE

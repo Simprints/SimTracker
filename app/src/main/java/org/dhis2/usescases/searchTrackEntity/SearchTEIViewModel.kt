@@ -11,6 +11,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.simprints.simprints.SimprintsBiometricsAction
+import com.simprints.simprints.SimprintsBiometricsState
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
+import com.simprints.simprints.ui.SimprintsBiometricsUiModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -25,10 +29,6 @@ import org.dhis2.commons.filters.FilterManager
 import org.dhis2.commons.idlingresource.SearchIdlingResourceSingleton
 import org.dhis2.commons.network.NetworkUtils
 import org.dhis2.commons.resources.ResourceManager
-import org.dhis2.commons.simprints.SimprintsBiometricsAction
-import org.dhis2.commons.simprints.SimprintsBiometricsState
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
-import org.dhis2.commons.simprints.ui.SimprintsBiometricsUiModel
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.data.search.SearchParametersModel
 import org.dhis2.form.model.FieldUiModelImpl

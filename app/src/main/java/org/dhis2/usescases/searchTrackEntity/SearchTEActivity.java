@@ -46,7 +46,6 @@ import org.dhis2.usescases.searchTrackEntity.ui.SearchScreenConfigurator;
 import org.dhis2.utils.DateUtils;
 import org.dhis2.utils.OrientationUtilsKt;
 import org.dhis2.utils.customviews.BreakTheGlassBottomDialog;
-import org.dhis2.utils.customviews.SimprintsBiometricLockingBottomDialog;
 import org.dhis2.utils.granularsync.SyncStatusDialog;
 import org.dhis2.utils.granularsync.SyncStatusDialogNavigatorKt;
 import org.hisp.dhis.android.core.arch.call.D2Progress;
@@ -210,7 +209,6 @@ public class SearchTEActivity extends ActivityGlobalAbstract implements SearchTE
         observeScreenState();
         observeDownload();
         observeLegacyInteractions();
-        observeTeiBiometricUnlocks();
 
         binding.simprintsBiometricSearchButton.setVisibility(
                 viewModel.isSimprintsBiometricSearchAvailable() ? View.VISIBLE : GONE
@@ -266,9 +264,6 @@ public class SearchTEActivity extends ActivityGlobalAbstract implements SearchTE
         presenter.setOpeningFilterToNone();
         if (initSearchNeeded) {
             presenter.onDestroy();
-        }
-        if (simprintsBiometricLockingBottomDialog != null) {
-            simprintsBiometricLockingBottomDialog.dismiss();
         }
         super.onPause();
     }
@@ -695,35 +690,9 @@ public class SearchTEActivity extends ActivityGlobalAbstract implements SearchTE
         }
     }
 
-    private SimprintsBiometricLockingBottomDialog simprintsBiometricLockingBottomDialog;
-
     @Override
     public void openDashboard(String teiUid, String programUid, String enrollmentUid) {
-        // Biometrically locked TEIs in the list are guarded by a popup to unlock before viewing.
-        if (viewModel.checkIfTeiLocked(teiUid, programUid, enrollmentUid)) {
-            simprintsBiometricLockingBottomDialog = new SimprintsBiometricLockingBottomDialog(
-                    viewModel.getSimprintsBiometricsUiModel(teiUid, programUid)
-            );
-            simprintsBiometricLockingBottomDialog.show(
-                    getSupportFragmentManager(),
-                    SimprintsBiometricLockingBottomDialog.class.getName()
-            );
-            return;
-        }
         searchNavigator.openDashboard(teiUid, programUid, enrollmentUid);
-    }
-
-    private void observeTeiBiometricUnlocks() {
-        viewModel.getTeiBiometricUnlocks().observe(this, teiBiometricUnlock -> {
-            if (simprintsBiometricLockingBottomDialog != null) {
-                simprintsBiometricLockingBottomDialog.dismiss();
-            }
-            searchNavigator.openDashboard(
-                    teiBiometricUnlock.getTeiUid(),
-                    teiBiometricUnlock.getProgramUid(),
-                    teiBiometricUnlock.getEnrollmentUid()
-            );
-        });
     }
 
     public void refreshData() {

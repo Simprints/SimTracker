@@ -1,5 +1,6 @@
 package org.dhis2.usescases.enrollment
 
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.FlowableProcessor
 import io.reactivex.processors.PublishProcessor
@@ -15,7 +16,6 @@ import org.dhis2.commons.matomo.Labels.Companion.CLICK
 import org.dhis2.commons.matomo.MatomoAnalyticsController
 import org.dhis2.commons.schedulers.SchedulerProvider
 import org.dhis2.commons.schedulers.defaultSubscribe
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.form.data.EnrollmentRepository
 import org.dhis2.form.model.RowAction

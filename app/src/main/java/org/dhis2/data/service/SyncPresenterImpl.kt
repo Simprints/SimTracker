@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.ListenableWorker
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import org.dhis2.bindings.toSeconds
@@ -19,7 +20,6 @@ import org.dhis2.commons.prefs.Preference.Companion.TIME_DAILY
 import org.dhis2.commons.prefs.Preference.Companion.TIME_DATA
 import org.dhis2.commons.prefs.Preference.Companion.TIME_META
 import org.dhis2.commons.prefs.PreferenceProvider
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.data.service.workManager.WorkManagerController
 import org.dhis2.data.service.workManager.WorkerItem
 import org.dhis2.data.service.workManager.WorkerType

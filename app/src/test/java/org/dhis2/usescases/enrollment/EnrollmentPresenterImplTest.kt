@@ -1,12 +1,12 @@
 package org.dhis2.usescases.enrollment
 
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import io.reactivex.Single
 import io.reactivex.processors.PublishProcessor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.dhis2.commons.matomo.MatomoAnalyticsController
 import org.dhis2.commons.schedulers.SchedulerProvider
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.data.schedulers.TrampolineSchedulerProvider
 import org.dhis2.form.data.EnrollmentRepository

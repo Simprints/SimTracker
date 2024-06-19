@@ -1,5 +1,6 @@
 package org.dhis2.usescases.teiDashboard
 
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import dagger.Module
 import dagger.Provides
 import dhis2.org.analytics.charts.Charts
@@ -8,7 +9,6 @@ import org.dhis2.commons.matomo.MatomoAnalyticsController
 import org.dhis2.commons.prefs.PreferenceProvider
 import org.dhis2.commons.resources.MetadataIconProvider
 import org.dhis2.commons.schedulers.SchedulerProvider
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.data.forms.EnrollmentFormRepository
 import org.dhis2.data.forms.FormRepository

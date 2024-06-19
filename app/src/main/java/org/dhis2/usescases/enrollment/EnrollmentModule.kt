@@ -1,6 +1,7 @@
 package org.dhis2.usescases.enrollment
 
 import android.content.Context
+import com.simprints.simprints.repository.SimprintsBiometricsRepository
 import dagger.Module
 import dagger.Provides
 import io.reactivex.processors.FlowableProcessor
@@ -16,7 +17,6 @@ import org.dhis2.commons.resources.DhisPeriodUtils
 import org.dhis2.commons.resources.MetadataIconProvider
 import org.dhis2.commons.resources.ResourceManager
 import org.dhis2.commons.schedulers.SchedulerProvider
-import org.dhis2.commons.simprints.repository.SimprintsBiometricsRepository
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.data.dhislogic.DhisEnrollmentUtils
 import org.dhis2.data.forms.dataentry.SearchTEIRepository

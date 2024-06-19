@@ -1,11 +1,11 @@
 package org.dhis2.form.model.simprints
 
+import com.simprints.simprints.SimprintsBiometricsAction
+import com.simprints.simprints.SimprintsBiometricsState
+import com.simprints.simprints.ui.SimprintsBiometricsUiModel
+import com.simprints.simprints.ui.SimprintsBiometricsUiModelProvider
 import kotlinx.coroutines.flow.StateFlow
 import org.dhis2.commons.orgunitselector.OrgUnitSelectorScope
-import org.dhis2.commons.simprints.SimprintsBiometricsAction
-import org.dhis2.commons.simprints.SimprintsBiometricsState
-import org.dhis2.commons.simprints.ui.SimprintsBiometricsUiModel
-import org.dhis2.commons.simprints.ui.SimprintsBiometricsUiModelProvider
 import org.dhis2.form.model.EventCategory
 import org.dhis2.form.model.FieldUiModel
 import org.dhis2.form.model.KeyboardActionType

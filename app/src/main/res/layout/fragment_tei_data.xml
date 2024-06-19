@@ -62,15 +62,11 @@
                             app:header="@{header}" />
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Similar Simprints biometrics readout and action UI as in the forms in TEI's details -->
                     <include
-                        android:id="@+id/viewSimprintsBiometrics"
-                        layout="@layout/form_simprints_biometrics"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:id="@+id/biometric_locked_status"
+                        layout="@layout/tei_biometric_lock_details" />
 
                 </LinearLayout>
-
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/tei_recycler"
@@ -115,6 +111,14 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <!-- Similar Simprints biometrics readout and action UI as in the forms in TEI's details -->
+        <include
+            android:id="@+id/viewSimprintsBiometrics"
+            layout="@layout/form_simprints_biometrics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

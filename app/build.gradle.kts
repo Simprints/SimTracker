@@ -260,6 +260,7 @@ dependencies {
     implementation(project(":compose-table"))
     implementation(project(":stock-usecase"))
     implementation(project(":dhis2-mobile-program-rules"))
+    implementation(project(":simprints"))
 
     implementation(libs.security.conscrypt)
     implementation(libs.security.rootbeer)

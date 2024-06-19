@@ -971,5 +971,4 @@
     <string name="database_export_downloaded">Database downloaded</string>
     <string name="importing_database">Importing database</string>
     <string name="re_open_to_edit">Re-open form to edit</string>
-    <string name="simprints_locked_verify_tei_biometrically_to_unlock">Locked. Verify TEI biometrically to unlock.</string>
 </resources>

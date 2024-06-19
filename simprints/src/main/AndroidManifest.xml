@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+
+        <!-- These activities serve as Android-specific data transporters between this SimTracker and the separate Simprints ID app. Not part of UI. -->
+        <activity android:name=".repository.flows.SimprintsBiometricEnrollmentRepository$SimprintsBiometricEnrollmentHandlingActivity" />
+        <activity android:name=".repository.flows.SimprintsBiometricVerificationRepository$SimprintsBiometricVerificationHandlingActivity" />
+        <activity android:name=".repository.flows.SimprintsBiometricIdentificationRepository$SimprintsBiometricIdentificationHandlingActivity" />
+
+    </application>
+
+</manifest>

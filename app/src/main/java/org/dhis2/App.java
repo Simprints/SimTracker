@@ -15,6 +15,8 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
+import com.simprints.simprints.di.SimprintsBiometricsDiModule;
+
 import org.dhis2.commons.di.dagger.PerActivity;
 import org.dhis2.commons.di.dagger.PerServer;
 import org.dhis2.commons.di.dagger.PerUser;
@@ -204,7 +206,8 @@ public class App extends MultiDexApplication implements Components, LifecycleObs
                 .coroutineDispatchers(new DispatcherModule())
                 .crashReportModule(new CrashReportModule())
                 .customDispatcher(new CustomDispatcherModule())
-                .featureConfigModule(new FeatureConfigModule());
+                .featureConfigModule(new FeatureConfigModule())
+                .simprintsBiometricsDiModule(new SimprintsBiometricsDiModule());
     }
 
     @NonNull

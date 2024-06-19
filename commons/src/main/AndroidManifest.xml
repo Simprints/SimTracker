@@ -19,11 +19,6 @@
         <activity android:name="org.dhis2.commons.dialogs.imagedetail.ImageDetailActivity"
             android:exported="false" />
 
-        <!-- These activities serve as Android-specific data transporters between this SimCapture and the separate Simprints ID app. Not part of UI. -->
-        <activity android:name=".simprints.repository.flows.SimprintsBiometricEnrollmentRepository$SimprintsBiometricEnrollmentHandlingActivity" />
-        <activity android:name=".simprints.repository.flows.SimprintsBiometricVerificationRepository$SimprintsBiometricVerificationHandlingActivity" />
-        <activity android:name=".simprints.repository.flows.SimprintsBiometricIdentificationRepository$SimprintsBiometricIdentificationHandlingActivity" />
-
     </application>
 
 </manifest>
